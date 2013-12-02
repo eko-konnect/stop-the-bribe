@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <!-- Make Report Activity -->
+    <string name="title_activity_make_report">Make Report</string>
+    
+    <string name="report_title_edittext_hint_activity_make_report">Report Title</string>
+    <string name="report_description_edittext_hint_activity_make_report">Description</string>
+    <string-array name="report_categories">
+        <item >Allegation</item>
+        <item >Commendation</item>
+        <item >Report</item>
+    </string-array>
+    
+    <string-array name="attach_options">
+        <item >Photo</item>
+        <item >Video</item>
+        <item >Audio</item>
+    </string-array>
+    
+</resources>

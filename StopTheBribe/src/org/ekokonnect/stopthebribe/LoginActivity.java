@@ -4,46 +4,67 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.content.IntentSender.SendIntentException;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.facebook.*;
+import com.facebook.internal.SessionTracker;
+import com.facebook.internal.Utility;
+import com.facebook.model.*;
+import com.facebook.widget.LoginButton;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
+import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
+import com.google.android.gms.plus.PlusClient;
+import com.google.android.gms.plus.model.people.Person;
+
 
 /**
  * Activity which displays a login screen to the user, offering registration as
  * well.
  */
-public class LoginActivity extends Activity {
-	/**
-	 * A dummy authentication store containing known user names and passwords.
-	 * TODO: remove after connecting to a real authentication system.
-	 */
-	private static final String[] DUMMY_CREDENTIALS = new String[] {
-			"foo@example.com:hello", "bar@example.com:world" };
-
-	/**
-	 * The default email to populate the email field with.
-	 */
-	public static final String EXTRA_EMAIL = "com.example.android.authenticatordemo.extra.EMAIL";
-
+public class LoginActivity extends Activity implements ConnectionCallbacks, OnConnectionFailedListener{
+	
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
 	 */
 	private UserLoginTask mAuthTask = null;
+	
+	//Google Required
+	private static final int REQUEST_CODE_RESOLVE_ERR = 9000;
+	 private static final String TAG = "LogInActivity";
+	
+	private ProgressDialog mConnectionProgressDialog;
+	private PlusClient mPlusClient;
+	private ConnectionResult mConnectionResult;
 
 	// Values for email and password at the time of the login attempt.
 	private String mEmail;
-	private String mPassword;
+	private String mFirstName;
+	private String mLastName;
+	private String loginMethod;
 
 	// UI references.
 	private EditText mEmailView;
-	private EditText mPasswordView;
+	private EditText mFirstNameView;
+	private EditText mLastNameView;
+	private Button mLoginView;
+	private LoginButton mFacebookLogin;
 	private View mLoginFormView;
 	private View mLoginStatusView;
 	private TextView mLoginStatusMessageView;
@@ -51,39 +72,58 @@ public class LoginActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		//Check if a user has been logged in
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		mFirstName = preferences.getString("Firstname", null);
+		mLastName = preferences.getString("Lastname", null);
+		
+		if(mFirstName != null && mLastName != null){
+			Intent intent = new Intent(getApplicationContext(), ReportListActivity.class);
+			startActivity(intent);
+		}
+		
 
 		setContentView(R.layout.activity_login);
 
 		// Set up the login form.
-		mEmail = getIntent().getStringExtra(EXTRA_EMAIL);
 		mEmailView = (EditText) findViewById(R.id.email);
-		mEmailView.setText(mEmail);
-
-		mPasswordView = (EditText) findViewById(R.id.password);
-		mPasswordView
-				.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-					@Override
-					public boolean onEditorAction(TextView textView, int id,
-							KeyEvent keyEvent) {
-						if (id == R.id.login || id == EditorInfo.IME_NULL) {
-							attemptLogin();
-							return true;
-						}
-						return false;
-					}
-				});
-
+		mFirstNameView = (EditText)findViewById(R.id.firstname);
+		mLastNameView = (EditText)findViewById(R.id.lastname);
+		mFacebookLogin = (LoginButton)findViewById(R.id.facebook_sigin);
+		mLoginView = (Button)findViewById(R.id.sign_in_button);
 		mLoginFormView = findViewById(R.id.login_form);
 		mLoginStatusView = findViewById(R.id.login_status);
 		mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
+		
+		//Google Requirements
+		mPlusClient = new PlusClient.Builder(this, this, this)
+        .setActions("http://schemas.google.com/AddActivity", "http://schemas.google.com/BuyActivity")
+        .setScopes("PLUS_LOGIN")  // Space separated list of scopes
+        .build();
+// Progress bar to be displayed if the connection failure is not resolved.
+		mConnectionProgressDialog = new ProgressDialog(this);
+		mConnectionProgressDialog.setMessage("Signing in...");
 
-		findViewById(R.id.sign_in_button).setOnClickListener(
+		mLoginView.setOnClickListener(
 				new View.OnClickListener() {
 					@Override
 					public void onClick(View view) {
+						loginMethod = "internal";
 						attemptLogin();
 					}
 				});
+		
+		mFacebookLogin.setReadPermissions("email");
+		mFacebookLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            	loginMethod = "facebook";
+            	loginToFacebook();
+            }
+        });
+		
+		
 	}
 
 	@Override
@@ -92,6 +132,9 @@ public class LoginActivity extends Activity {
 		getMenuInflater().inflate(R.menu.login, menu);
 		return true;
 	}
+	
+	
+	//Beginning of Method Groups which handle in app validation
 
 	/**
 	 * Attempts to sign in or register the account specified by the login form.
@@ -105,25 +148,30 @@ public class LoginActivity extends Activity {
 
 		// Reset errors.
 		mEmailView.setError(null);
-		mPasswordView.setError(null);
-
+		mFirstNameView.setError(null);
+		mLastNameView.setError(null);
+		
 		// Store values at the time of the login attempt.
 		mEmail = mEmailView.getText().toString();
-		mPassword = mPasswordView.getText().toString();
+		mFirstName = mFirstNameView.getText().toString();
+		mLastName = mLastNameView.getText().toString();
 
 		boolean cancel = false;
 		View focusView = null;
 
-		// Check for a valid password.
-		if (TextUtils.isEmpty(mPassword)) {
-			mPasswordView.setError(getString(R.string.error_field_required));
-			focusView = mPasswordView;
+		// Check if First Name is empty.
+		if (TextUtils.isEmpty(mFirstName)) {
+			mFirstNameView.setError(getString(R.string.error_field_required));
+			focusView = mFirstNameView;
 			cancel = true;
-		} else if (mPassword.length() < 4) {
-			mPasswordView.setError(getString(R.string.error_invalid_password));
-			focusView = mPasswordView;
+		} 
+		
+		//Check if Last Name is empty
+		if (TextUtils.isEmpty(mLastName)) {
+			mLastNameView.setError(getString(R.string.error_field_required));
+			focusView = mLastNameView;
 			cancel = true;
-		}
+		} 
 
 		// Check for a valid email address.
 		if (TextUtils.isEmpty(mEmail)) {
@@ -200,22 +248,7 @@ public class LoginActivity extends Activity {
 		protected Boolean doInBackground(Void... params) {
 			// TODO: attempt authentication against a network service.
 
-			try {
-				// Simulate network access.
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				return false;
-			}
-
-			for (String credential : DUMMY_CREDENTIALS) {
-				String[] pieces = credential.split(":");
-				if (pieces[0].equals(mEmail)) {
-					// Account exists, return true if the password matches.
-					return pieces[1].equals(mPassword);
-				}
-			}
-
-			// TODO: register the new account here.
+			toSharedPreferences();
 			return true;
 		}
 
@@ -225,11 +258,12 @@ public class LoginActivity extends Activity {
 			showProgress(false);
 
 			if (success) {
-				finish();
+				Intent intent = new Intent(getApplicationContext(), ReportListActivity.class);
+				startActivity(intent);
 			} else {
-				mPasswordView
+				mEmailView
 						.setError(getString(R.string.error_incorrect_password));
-				mPasswordView.requestFocus();
+				mEmailView.requestFocus();
 			}
 		}
 
@@ -239,4 +273,112 @@ public class LoginActivity extends Activity {
 			showProgress(false);
 		}
 	}
+	//End of method Groups which handle In App validation
+	
+	
+	//Facebook Validation Methods
+	public void loginToFacebook(){
+        Session.openActiveSession(this, true, new Session.StatusCallback() {
+            @Override
+            public void call(Session session, SessionState state, Exception exception) {
+                Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
+                    @Override
+                    public void onCompleted(GraphUser user, Response response) {
+                        if (user != null) {
+                            mFirstName = user.getFirstName();
+                            mLastName = user.getLastName();
+                            Log.d("name", mFirstName);
+                            mEmail = user.getProperty("email").toString();
+                            mEmail = "";
+                            toSharedPreferences();
+                            Intent intent = new Intent(getApplicationContext(), ReportListActivity.class);
+                            startActivity(intent);
+                        }
+                    }
+                });
+            }
+        });
+    }
+	
+	// end of facebook methods
+	
+	//Google Signin Methods
+	@Override
+	public void onConnectionFailed(ConnectionResult result) {
+		// TODO Auto-generated method stub
+		if (mConnectionProgressDialog.isShowing()){
+			if(result.hasResolution()){
+				 try {
+                     result.startResolutionForResult(this, REQUEST_CODE_RESOLVE_ERR);
+             } catch (SendIntentException e) {
+                     mPlusClient.connect();
+             }
+			}
+		}
+		
+		mConnectionResult = result;
+		
+	}
+	
+	@Override
+	public void onConnected(Bundle connectionHint) {
+		// TODO Auto-generated method stub
+		mConnectionProgressDialog.dismiss();
+		
+	}
+	
+	@Override
+    public void onDisconnected() {
+        Log.d(TAG, "disconnected");
+    }
+	//End of google required methods
+	
+	
+	//General Purpose Methods
+	public void toSharedPreferences(){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("Email", mEmail);
+        editor.putString("Firstname", mFirstName);
+        editor.putString("Lastname", mLastName);
+        editor.commit();
+    }
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		if(loginMethod == "facebook"){
+			super.onActivityResult(requestCode, resultCode, data);
+			Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
+		}
+		
+		if(loginMethod == "google"){
+			if (requestCode == REQUEST_CODE_RESOLVE_ERR && resultCode == RESULT_OK) {
+		        mConnectionResult = null;
+		        mPlusClient.connect();
+		    }
+		}
+		
+	}
+	
+	 @Override
+	    protected void onStart() {
+	        super.onStart();
+	        if(loginMethod == "google"){
+	        	mPlusClient.connect();
+	        }
+	        
+	    }
+
+	    @Override
+	    protected void onStop() {
+	        super.onStop();
+	        if(loginMethod=="google"){
+	        	mPlusClient.disconnect();
+	        }
+	        
+	    }
+	//End of general Purpose Methods
+	
 }
