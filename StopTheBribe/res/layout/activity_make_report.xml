@@ -36,12 +36,13 @@
 	        android:inputType="text|textMultiLine|textLongMessage"
 	        android:paddingTop="@dimen/activity_vertical_padding"/>
 	    
-	    <com.devsmart.android.ui.HorizontalListView 
+	    
+	    <com.twotoasters.android.horizontalimagescroller.widget.HorizontalImageScroller 
 	        android:id="@+id/make_report_gallery_listview" 
-	        android:layout_width="fill_parent" 
-	        android:layout_height="150dip" 
-	        android:background="#dee"
-	        android:paddingTop="@dimen/activity_vertical_padding" /> 
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content" />
+
+	        
 	    
 	    <Button 
 	        android:id="@+id/make_report_button"

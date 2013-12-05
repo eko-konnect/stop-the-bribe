@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 
 public class Gallery {
 	public int id;
-	public Object content;
+	public String path;
 	public Bitmap thumb;
 	public int type;
 

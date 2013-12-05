@@ -81,6 +81,16 @@ public class ImageManager {
 				.scaleBitmap(options, file);
 
 	}
+	
+	public static Bitmap getBitmapsAbsolute(Context context, String fileName) {
+		//String file = getPhotoPath(context) + fileName;
+		final BitmapFactory.Options options = getBitmapFactoryOptions(context,
+				fileName);
+		// scale image
+		return PhotoUtils
+				.scaleBitmap(options, fileName);
+
+	}
 
 	public static Drawable getDrawables(Context context, String fileName,
 			int width) {

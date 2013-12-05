@@ -52,7 +52,7 @@ public class FetchReports extends SyncServices {
 	 */
 	public void clearCachedData() {
 		// delete reports
-		new ListReportModel().deleteReport();
+		new ListReportModel(getApplicationContext()).deleteReport();
 
 		// delete comment data
 		new ListCommentModel().deleteComments();

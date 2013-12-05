@@ -1,12 +1,17 @@
 package org.ekokonnect.stopthebribe;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import com.ushahidi.android.app.entities.ReportEntity;
+import com.ushahidi.android.app.models.ListReportModel;
 
 import models.Report;
 import models.ReportDataSource;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,8 +21,11 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 public class ReportListActivity extends ListActivity {
+	private static final String TAG = "ReportListActivity";
 	private ReportDataSource reportDataSource;
-	ArrayList<Report> reports;
+	//ArrayList<Report> reports;
+	ListReportModel model;
+	List<ReportEntity> reportList;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -26,15 +34,25 @@ public class ReportListActivity extends ListActivity {
 		ListView listview = getListView();
 		
 		
-		reportDataSource = new ReportDataSource(this);
-		reportDataSource.open();
+		//reportDataSource = new ReportDataSource(this);
+		//reportDataSource.open();
 		
-		reportDataSource.insertIntoTable();//hardcode values into DB
+		//reportDataSource.insertIntoTable();//hardcode values into DB
 		
 		
-		reports = reportDataSource.getAllReports();//get values from DB
+		//reports = reportDataSource.getAllReports();//get values from DB
+		model = new ListReportModel(getApplicationContext());
+		if(model.loadPendingReports()){
+//			model.getReports();
+			reportList = model.getReports();
+			Log.d(TAG, reportList.size()+" Reports Loaded");
+		} else {
+			Log.e(TAG, "error loading reports");
+			reportList = new ArrayList<ReportEntity>();
+		}
+			
 		
-		ReportListAdapter adapter = new ReportListAdapter(this, reports);
+		ReportListAdapter adapter = new ReportListAdapter(this, reportList);
 		setListAdapter(adapter);
 		
 		listview.setOnItemClickListener(new OnItemClickListener() {
@@ -43,12 +61,13 @@ public class ReportListActivity extends ListActivity {
 			public void onItemClick(AdapterView<?> view, View arg1, int position,
 					long arg3) {
 				Intent i = new Intent(getApplicationContext(), ViewReportActivity.class);
-				Report report = reports.get(position);
+				ReportEntity report = reportList.get(position);
+				int id = report.getDbId();
 				
-				i.putExtra("title", report.getTitle());
-				i.putExtra("author", report.getAuthor());
-				i.putExtra("date", report.getDate());
-				i.putExtra("description", report.getDescription());
+				i.putExtra("id", id);
+//				i.putExtra("author", report.getAuthor());
+//				i.putExtra("date", report.getDate());
+//				i.putExtra("description", report.getDescription());
 				
 				startActivity(i);
 				

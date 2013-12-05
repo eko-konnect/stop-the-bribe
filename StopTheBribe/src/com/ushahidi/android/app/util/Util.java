@@ -582,6 +582,11 @@ public class Util {
 		// TODO Auto-generated method stub
 		Log.d("UShaidi API", format);
 	}
+	
+	public void log(String format, Exception ex) {
+		// TODO Auto-generated method stub
+		Log.d("UShaidi API", format);
+	}
 
 
 }

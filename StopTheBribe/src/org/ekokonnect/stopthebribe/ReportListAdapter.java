@@ -1,6 +1,7 @@
 package org.ekokonnect.stopthebribe;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import models.Report;
 import android.app.Activity;
@@ -11,13 +12,16 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.ushahidi.android.app.entities.ReportEntity;
+import com.ushahidi.java.sdk.api.Incident;
+
 
 public class ReportListAdapter extends BaseAdapter {
 	LayoutInflater inflater;
 	Activity activity;
-	ArrayList<Report> reports;
+	List<ReportEntity> reports;
 	
-	public ReportListAdapter(Activity activity, ArrayList<Report> reports){
+	public ReportListAdapter(Activity activity, List<ReportEntity> reports){
 		this.reports = reports;
 		this.activity = activity;
 		inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -52,12 +56,14 @@ public class ReportListAdapter extends BaseAdapter {
 			 TextView description = (TextView)vi.findViewById(R.id.summary);
 			 TextView date = (TextView)vi.findViewById(R.id.date);
 			 
-			 Report report = reports.get(position);
-			 title.setText(report.getTitle());
-			 date.setText(report.getDate());
+			 ReportEntity report = reports.get(position);
+			 Incident inc = report.getIncident();
+			 title.setText(inc.getTitle());
+			 date.setText(inc.getDate().toLocaleString());
 			 
-			 String shortdescription = report.getDescription().substring(0, 250);
-			 description.setText(shortdescription);;
+			 String desc = inc.getDescription();
+			 String shortdescription = desc.substring(0, Math.min(250, desc.length()));
+			 description.setText(shortdescription);
 		}
 		return vi;
 	}

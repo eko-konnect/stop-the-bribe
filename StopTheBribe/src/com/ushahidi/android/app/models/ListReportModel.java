@@ -22,6 +22,8 @@ package com.ushahidi.android.app.models;
 
 import java.util.List;
 
+import android.content.Context;
+
 import com.ushahidi.android.app.database.Database;
 import com.ushahidi.android.app.database.IMediaSchema;
 import com.ushahidi.android.app.database.IReportSchema;
@@ -38,9 +40,15 @@ public class ListReportModel{
 	public List<ReportEntity> mReports;
 
 	public List<ListReportModel> reportModel;
+	private Database db;
+	
+	public ListReportModel(Context context){
+		db = new Database(context);
+		db.open();
+	}
 
 	public boolean load() {
-		mReports = Database.mReportDao.fetchAllReports();
+		mReports = db.mReportDao.fetchAllReports();
 
 		if (mReports != null) {
 			return true;
@@ -49,7 +57,7 @@ public class ListReportModel{
 	}
 
 	public boolean loadReportById(long id) {
-		mReports = Database.mReportDao.fetchReportById(id);
+		mReports = db.mReportDao.fetchReportById(id);
 
 		if (mReports != null) {
 			return true;
@@ -58,7 +66,7 @@ public class ListReportModel{
 	}
 
 	public boolean loadPendingReports() {
-		mReports = Database.mReportDao.fetchAllPendingReports();
+		mReports = db.mReportDao.fetchAllPendingReports();
 		if (mReports != null) {
 			return true;
 		}
@@ -67,7 +75,7 @@ public class ListReportModel{
 
 	public boolean loadPendingReportsByCategory(int categoryId) {
 
-		mReports = Database.mReportDao
+		mReports = db.mReportDao
 				.fetchPendingReportByCategoryId(categoryId);
 		if (mReports != null) {
 			return true;
@@ -76,7 +84,7 @@ public class ListReportModel{
 	}
 
 	public boolean loadReportByCategory(int categoryId) {
-		mReports = Database.mReportDao.fetchReportByCategoryId(categoryId);
+		mReports = db.mReportDao.fetchReportByCategoryId(categoryId);
 
 		if (mReports != null) {
 			return true;
@@ -89,27 +97,27 @@ public class ListReportModel{
 	}
 	
 	public List<CategoryEntity> getParentCategories() {
-		return Database.mCategoryDao.fetchAllCategoryTitles();
+		return db.mCategoryDao.fetchAllCategoryTitles();
 
 	}
 	
 	public List<CategoryEntity> getAllCategories() {
-		return Database.mCategoryDao.fetchAllCategories();
+		return db.mCategoryDao.fetchAllCategories();
 
 	}
 	
 	public List<CategoryEntity> getChildrenCategories(int parentId) {
-		return Database.mCategoryDao.fetchChildrenCategories(parentId);
+		return db.mCategoryDao.fetchChildrenCategories(parentId);
 	}
 
 	public List<CategoryEntity> getCategoriesByReportId(int reportId) {
 
-		return Database.mCategoryDao.fetchCategoryByReportId(reportId);
+		return db.mCategoryDao.fetchCategoryByReportId(reportId);
 	}
 
 	public String getImage(int reportId) {
 
-		List<MediaEntity> sMedia = Database.mMediaDao.fetchMedia(
+		List<MediaEntity> sMedia = db.mMediaDao.fetchMedia(
 				IMediaSchema.REPORT_ID, reportId, IMediaSchema.IMAGE, 1);
 		if (sMedia != null && sMedia.size() > 0) {
 			return sMedia.get(0).getLink();
@@ -128,22 +136,22 @@ public class ListReportModel{
 	public boolean deleteAllFetchedReport(int reportId) {
 
 		// delete fetched reports
-		if (Database.mReportDao.deleteReportById(reportId)) {
+		if (db.mReportDao.deleteReportById(reportId)) {
 			new Util().log("All fetched report deleted");
 		}
 
 		// delete categories
-		if (Database.mReportCategoryDao
+		if (db.mReportCategoryDao
 				.deleteReportCategoryByReportId(reportId,IReportSchema.FETCHED)) {
 			new Util().log("All fetched report categories deleted");
 		}
 
-		if (Database.mCategoryDao.deleteAllCategories()) {
+		if (db.mCategoryDao.deleteAllCategories()) {
 			new Util().log("Category deleted");
 		}
 
 		// delete media
-		if (Database.mMediaDao.deleteReportPhoto(reportId)) {
+		if (db.mMediaDao.deleteReportPhoto(reportId)) {
 			new Util().log("Media deleted");
 		}
 		return true;
@@ -151,21 +159,21 @@ public class ListReportModel{
 
 	public boolean deleteReport() {
 		// delete fetched reports
-		if (Database.mReportDao.deleteAllReport()) {
+		if (db.mReportDao.deleteAllReport()) {
 			new Util().log("Report deleted");
 		}
 
 		// delete categories
-		if (Database.mReportCategoryDao.deleteAllReportCategory()) {
+		if (db.mReportCategoryDao.deleteAllReportCategory()) {
 			new Util().log("Report categories deleted");
 		}
 
-		if (Database.mCategoryDao.deleteAllCategories()) {
+		if (db.mCategoryDao.deleteAllCategories()) {
 			new Util().log( "Category deleted");
 		}
 
 		// delete media
-		if (Database.mMediaDao.deleteAllMedia()) {
+		if (db.mMediaDao.deleteAllMedia()) {
 			new Util().log("Media deleted");
 		}
 		return true;

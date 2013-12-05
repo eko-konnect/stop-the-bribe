@@ -1,5 +1,10 @@
 package org.ekokonnect.stopthebribe;
 
+import org.ekokonnect.stopthebribe.modelhelpers.ReportHelper;
+
+import com.ushahidi.android.app.entities.ReportEntity;
+import com.ushahidi.java.sdk.api.Incident;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -8,6 +13,8 @@ import android.widget.TextView;
 
 public class ViewReportActivity extends Activity {
 	TextView editTitle, editAuthor, editDate, editDescription;
+	ReportHelper model;
+	ReportEntity report;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -19,15 +26,20 @@ public class ViewReportActivity extends Activity {
 		editDescription = (TextView) findViewById(R.id.reportDescription);
 		Bundle extras = getIntent().getExtras();
 		
-		String title = (String)extras.getString("title");
-		String author = (String)extras.getString("author");
-		String date = (String)extras.getString("date");
-		String description = (String)extras.getString("description");
+		int id = extras.getInt("id");
+		model = new ReportHelper(getApplicationContext());
+		report = model.fetchPendingReportById(id);
+		Incident inc = report.getIncident();
 		
-		editTitle.setText(title);
-		editAuthor.setText(author);
-		editDate.setText(date);
-		editDescription.setText(description);
+//		String title = (String)extras.getString("title");
+//		String author = (String)extras.getString("author");
+//		String date = (String)extras.getString("date");
+//		String description = (String)extras.getString("description");
+		
+		editTitle.setText(inc.getTitle());
+		editAuthor.setText("Anonymous");
+		editDate.setText(inc.getDate().toLocaleString());
+		editDescription.setText(inc.getDescription());
 		
 	}
 	@Override

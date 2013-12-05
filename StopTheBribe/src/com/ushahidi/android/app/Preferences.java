@@ -16,7 +16,7 @@ public class Preferences {
 
 	public static String savePath = "";
 
-	public static String domain = "http://stopthebribes.net";
+	public static String domain = "http://stopthebribes.net/";
 
 	public static String firstname = "";
 
@@ -24,7 +24,7 @@ public class Preferences {
 
 	public static String email = "";
 
-	public static String totalReports = "";
+	public static String totalReports = "2"; // ""
 	
 	public static String mapTiles = "";
 

@@ -1,3 +1,5 @@
+package com.ushahidi.android.app.database;
+
 /** 
  ** Copyright (c) 2010 Ushahidi Inc
  ** All rights reserved
@@ -18,8 +20,6 @@
  ** 
  **/
 
-package com.ushahidi.android.app.database;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,17 +32,38 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.ushahidi.android.app.database.CategoryDao;
+import com.ushahidi.android.app.database.CheckinDao;
+import com.ushahidi.android.app.database.CommentDao;
+import com.ushahidi.android.app.database.ICategorySchema;
+import com.ushahidi.android.app.database.ICheckinSchema;
+import com.ushahidi.android.app.database.ICommentSchema;
+import com.ushahidi.android.app.database.IMapSchema;
+import com.ushahidi.android.app.database.IMediaSchema;
+import com.ushahidi.android.app.database.IOfflineReportSchema;
+import com.ushahidi.android.app.database.IOpenGeoSmsSchema;
+import com.ushahidi.android.app.database.IReportCategorySchema;
+import com.ushahidi.android.app.database.IReportSchema;
+import com.ushahidi.android.app.database.IUserSchema;
+import com.ushahidi.android.app.database.MapDao;
+import com.ushahidi.android.app.database.MediaDao;
+import com.ushahidi.android.app.database.OfflineReportDao;
+import com.ushahidi.android.app.database.OpenGeoSmsDao;
+import com.ushahidi.android.app.database.ReportCategoryDao;
+import com.ushahidi.android.app.database.ReportDao;
+import com.ushahidi.android.app.database.UserDao;
+
 public class Database {
 
-	private static final String TAG = "UshahidiDatabase";
+	private static final String TAG = "StopTheBribeUshaidiDatabase";
 
 	private DatabaseHelper mDbHelper;
 
 	private SQLiteDatabase mDb;
 
-	public static final String DATABASE_NAME = "ushahidi_db";
+	public static final String DATABASE_NAME = "stop_bribe_ushahidi_db";
 
-	private static final int DATABASE_VERSION = 19;
+	private static final int DATABASE_VERSION = 20;
 
 	private final Context mContext;
 
