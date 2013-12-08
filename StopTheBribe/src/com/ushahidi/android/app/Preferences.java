@@ -38,7 +38,7 @@ public class Preferences {
 
 	public static String activeMapName = "";
 
-	public static int photoWidth = 200;
+	public static int photoWidth = 500;
 
 	public static String deploymentLatitude = "0.0";
 

@@ -32,6 +32,7 @@ import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallback
 import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.model.people.Person;
+import com.google.android.gms.plus.model.people.Person.Image;
 
 
 /**
@@ -68,6 +69,7 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
 	private View mLoginFormView;
 	private View mLoginStatusView;
 	private TextView mLoginStatusMessageView;
+	private View googleSigninButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -95,10 +97,11 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
 		mLoginFormView = findViewById(R.id.login_form);
 		mLoginStatusView = findViewById(R.id.login_status);
 		mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
+		googleSigninButton = (View) findViewById(R.id.google_signin);
 		
 		//Google Requirements
 		mPlusClient = new PlusClient.Builder(this, this, this)
-        .setActions("http://schemas.google.com/AddActivity", "http://schemas.google.com/BuyActivity")
+        .setActions("http://schemas.google.com/AddActivity")
         .setScopes("PLUS_LOGIN")  // Space separated list of scopes
         .build();
 // Progress bar to be displayed if the connection failure is not resolved.
@@ -123,7 +126,32 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
             }
         });
 		
+		googleSigninButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				googleLogin();
+			}
+		});
 		
+		
+	}
+	
+	private void googleLogin(){
+		if (!mPlusClient.isConnected()) {
+            if (mConnectionResult == null) {
+                mConnectionProgressDialog.show();
+            } else {
+                try {
+                    mConnectionResult.startResolutionForResult(this, REQUEST_CODE_RESOLVE_ERR);
+                } catch (SendIntentException e) {
+                    // Try connecting again.
+                    mConnectionResult = null;
+                    mPlusClient.connect();
+                }
+            }
+        }
 	}
 
 	@Override
@@ -323,8 +351,24 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
 	@Override
 	public void onConnected(Bundle connectionHint) {
 		// TODO Auto-generated method stub
-		mConnectionProgressDialog.dismiss();
+		if (mPlusClient.getCurrentPerson() != null) {
+	        Person currentPerson = mPlusClient.getCurrentPerson();
+	        String personName = currentPerson.getDisplayName();
+//	        Image personPhoto = currentPerson.getImage();
+//	        String personGooglePlusProfile = currentPerson.getUrl();
+	        String email = mPlusClient.getAccountName();
+	        
+	        mFirstName = currentPerson.getName().getGivenName();
+	        mLastName = currentPerson.getName().getFamilyName();
+	        mEmail = email;
+	        Log.i("Login", mFirstName+" "+mLastName+": "+mEmail);
+	        
+	    }
 		
+		mConnectionProgressDialog.dismiss();
+		toSharedPreferences();
+		Intent intent = new Intent(getApplicationContext(), ReportListActivity.class);
+        startActivity(intent);
 	}
 	
 	@Override
@@ -365,18 +409,18 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
 	 @Override
 	    protected void onStart() {
 	        super.onStart();
-	        if(loginMethod == "google"){
+	        //if(loginMethod == "google"){
 	        	mPlusClient.connect();
-	        }
+	        //}
 	        
 	    }
 
 	    @Override
 	    protected void onStop() {
 	        super.onStop();
-	        if(loginMethod=="google"){
+	        //if(loginMethod=="google"){
 	        	mPlusClient.disconnect();
-	        }
+	        //}
 	        
 	    }
 	//End of general Purpose Methods

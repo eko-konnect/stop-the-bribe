@@ -49,22 +49,22 @@ public class ReportListAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parentView) {
 		View vi = convertView;
 		
-		if (convertView == null){
+		if (convertView == null)
 			 vi = inflater.inflate(R.layout.report_list_row, null);
-			
-			 TextView title = (TextView) vi.findViewById(R.id.title);
-			 TextView description = (TextView)vi.findViewById(R.id.summary);
-			 TextView date = (TextView)vi.findViewById(R.id.date);
-			 
-			 ReportEntity report = reports.get(position);
-			 Incident inc = report.getIncident();
-			 title.setText(inc.getTitle());
-			 date.setText(inc.getDate().toLocaleString());
-			 
-			 String desc = inc.getDescription();
-			 String shortdescription = desc.substring(0, Math.min(250, desc.length()));
-			 description.setText(shortdescription);
-		}
+		
+		TextView title = (TextView) vi.findViewById(R.id.title);
+		 TextView description = (TextView)vi.findViewById(R.id.summary);
+		 TextView date = (TextView)vi.findViewById(R.id.date);
+		 
+		 ReportEntity report = reports.get(position);
+		 Incident inc = report.getIncident();
+		 title.setText(inc.getTitle());
+		 date.setText(inc.getDate().toLocaleString());
+		 
+		 String desc = inc.getDescription();
+		 String shortdescription = desc.substring(0, Math.min(250, desc.length()));
+		 description.setText(shortdescription);
+		
 		return vi;
 	}
 	

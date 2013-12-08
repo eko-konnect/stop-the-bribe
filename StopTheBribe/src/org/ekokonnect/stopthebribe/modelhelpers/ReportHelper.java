@@ -153,6 +153,10 @@ public class ReportHelper extends Model {
 		return db.mReportDao.fetchPendingReportIdById(reportId);
 	}
 	
+	public ReportEntity fetchReportById(int reportId) {
+		return db.mReportDao.fetchReportBId(reportId);
+	}
+	
 
 	public List<ReportCategory> fetchReportCategories(int reportId, int status) {
 		return db.mReportCategoryDao.fetchReportCategoryByReportId(

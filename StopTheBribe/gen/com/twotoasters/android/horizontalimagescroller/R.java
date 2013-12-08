@@ -20,8 +20,8 @@ public final class R {
 		public static final int ic_launcher = 0x7f02003b;
 	}
 	public static final class id {
-		public static final int image = 0x7f070032;
-		public static final int image_frame = 0x7f070031;
+		public static final int image = 0x7f070036;
+		public static final int image_frame = 0x7f070035;
 	}
 	public static final class layout {
 		public static final int horizontal_image_scroller_item = 0x7f030014;

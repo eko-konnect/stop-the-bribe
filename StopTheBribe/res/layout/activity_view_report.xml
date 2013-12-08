@@ -40,18 +40,45 @@
 			  	/>
 		</LinearLayout>
 		
-		<ImageView
-		    android:id="@+id/reportMedia"
+		<com.twotoasters.android.horizontalimagescroller.widget.HorizontalImageScroller 
+	        android:id="@+id/view_report_photo" 
+		    android:layout_width="match_parent"
+		    android:layout_height="wrap_content" />
+		
+		<TextView 
+		    android:id="@+id/reportPlace"
 		    android:layout_width="fill_parent"
-		    android:layout_height="wrap_content"/>
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="right"
+		    android:gravity="right"/>
 		
 		<TextView
 		    android:id="@+id/reportDescription"
 		    android:layout_width="fill_parent"
 		    android:layout_height="wrap_content"
-		    android:paddingLeft="5dp"
-		    android:paddingTop="5dp"
-		    android:paddingRight="5dp"/>
+		    android:padding="5dp" />
+		
+		<LinearLayout
+            android:id="@+id/map_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/com_facebook_blue"
+            android:orientation="vertical"
+            android:padding="10dip" >
+
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/loc_map"
+                android:layout_width="match_parent"
+                android:layout_height="300dip"
+                android:layout_gravity="center" />
+        </LinearLayout>
+		
+		<TextView 
+		    android:id="@+id/reportLink"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:layout_gravity="right"
+		    android:gravity="right"/>
 	
 	</LinearLayout>
         

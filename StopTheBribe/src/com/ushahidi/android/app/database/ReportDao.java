@@ -257,6 +257,32 @@ public class ReportDao extends DbContentProvider implements IReportDao,
 
 		return listReport;
 	}
+	
+
+	public ReportEntity fetchReportBId(int id) {
+		final String sortOrder = INCIDENT_ID;
+
+		final String selectionArgs[] = { String.valueOf(id) };
+
+		final String selection = INCIDENT_ID + " = ?";
+
+		ReportEntity report = new ReportEntity();
+
+		cursor = super.query(INCIDENTS_TABLE, null, selection, selectionArgs,
+				sortOrder);
+		if (cursor != null) {
+
+			cursor.moveToFirst();
+			while (!cursor.isAfterLast()) {
+				report = cursorToEntity(cursor);
+
+				cursor.moveToNext();
+			}
+			cursor.close();
+		}
+
+		return report;
+	}
 
 	@Override
 	public ReportEntity fetchPendingReportIdById(int reportId) {
