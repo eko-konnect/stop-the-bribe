@@ -82,6 +82,7 @@ public class ReportListActivity extends ListActivity {
 				final String deployment = getString(R.string.deployment_url);
 		        if (ApiUtils.validateUshahidiInstance(deployment)) {
 		            Log.i("Dashboard", "Valid Domain " + deployment);
+		            Preferences.loadSettings(getApplicationContext());
 		            Preferences.domain = deployment;
 		            Preferences.saveSettings(this);
 
@@ -90,7 +91,7 @@ public class ReportListActivity extends ListActivity {
 		                // refreshReports();
 		                Preferences.appRunsFirstTime = 1;
 		                Preferences.saveSettings(this);
-		                //startService(new Intent(this, FetchReports.class));
+		                startService(new Intent(this, FetchReports.class));
 		                //return true;
 		                //Log.d(TAG, "FetchReports Service started");
 		            } else {
