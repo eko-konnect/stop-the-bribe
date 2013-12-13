@@ -35,6 +35,16 @@ import com.ushahidi.android.app.util.PhotoUtils;
  * @author eyedol
  */
 public class ListPhotoModel extends Model {
+	Database db;
+	
+	public ListPhotoModel(Context context){
+		db = new Database(context);
+		db.open();
+	}
+	
+	public void close(){
+		db.close();
+	}
 
 	private List<MediaEntity> mMedia;
 
@@ -45,7 +55,7 @@ public class ListPhotoModel extends Model {
 	private static final String PENDING = "pending/";
 
 	public boolean load(int reportId) {
-		mMedia = Database.mMediaDao.fetchReportPhoto(reportId);
+		mMedia = db.mMediaDao.fetchReportPhoto(reportId);
 		if (mMedia != null) {
 			return true;
 		}
@@ -53,7 +63,7 @@ public class ListPhotoModel extends Model {
 	}
 	
 	public boolean loadCheckinPhoto(int checkinId) {
-		mMedia = Database.mMediaDao.fetchCheckinPhoto(checkinId);
+		mMedia = db.mMediaDao.fetchCheckinPhoto(checkinId);
 		if (mMedia != null) {
 			return true;
 		}
@@ -97,7 +107,7 @@ public class ListPhotoModel extends Model {
 	public List<PhotoEntity> getPhotosByReportId(int reportId) {
 
 		mPhotoModel = new ArrayList<PhotoEntity>();
-		mMedia = Database.mMediaDao.fetchReportPhoto(reportId);
+		mMedia = db.mMediaDao.fetchReportPhoto(reportId);
 		if (mMedia != null && mMedia.size() > 0) {
 
 			for (MediaEntity item : mMedia) {
@@ -115,7 +125,7 @@ public class ListPhotoModel extends Model {
 	public List<PhotoEntity> getPhotosByCheckinId(int checkinId) {
 
 		mPhotoModel = new ArrayList<PhotoEntity>();
-		mMedia = Database.mMediaDao.fetchCheckinPhoto(checkinId);
+		mMedia = db.mMediaDao.fetchCheckinPhoto(checkinId);
 		if (mMedia != null && mMedia.size() > 0) {
 
 			for (MediaEntity item : mMedia) {
@@ -133,13 +143,14 @@ public class ListPhotoModel extends Model {
 	public List<PhotoEntity> getPendingPhotosByReportId(int reportId) {
 
 		mPhotoModel = new ArrayList<PhotoEntity>();
-		mMedia = Database.mMediaDao.fetchPendingReportPhoto(reportId);
+		mMedia = db.mMediaDao.fetchPendingReportPhoto(reportId);
 		if (mMedia != null && mMedia.size() > 0) {
 
 			for (MediaEntity item : mMedia) {
 				PhotoEntity photo = new PhotoEntity();
 				photo.setDbId(item.getDbId());
-				photo.setPhoto(FETCHED + item.getLink());
+//				photo.setPhoto(FETCHED + item.getLink());
+				photo.setPhoto(item.getLink());
 				mPhotoModel.add(photo);
 			}
 
@@ -151,7 +162,7 @@ public class ListPhotoModel extends Model {
 	public List<PhotoEntity> getPendingPhotosByCheckinId(int checkinId) {
 
 		mPhotoModel = new ArrayList<PhotoEntity>();
-		mMedia = Database.mMediaDao.fetchPendingCheckinPhoto(checkinId);
+		mMedia = db.mMediaDao.fetchPendingCheckinPhoto(checkinId);
 		if (mMedia != null && mMedia.size() > 0) {
 
 			for (MediaEntity item : mMedia) {

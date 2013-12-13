@@ -1,6 +1,5 @@
 package org.ekokonnect.stopthebribe;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -51,12 +50,9 @@ import com.twotoasters.android.horizontalimagescroller.image.ImageToLoadBitmap;
 import com.twotoasters.android.horizontalimagescroller.widget.HorizontalImageScroller;
 import com.twotoasters.android.horizontalimagescroller.widget.HorizontalImageScrollerAdapter;
 import com.twotoasters.android.horizontalimagescroller.widget.HorizontalListView;
-import com.ushahidi.android.app.api.ReportsApi;
 import com.ushahidi.android.app.entities.ReportEntity;
 import com.ushahidi.android.app.util.ImageManager;
 import com.ushahidi.java.sdk.api.Incident;
-import com.ushahidi.java.sdk.api.ReportFields;
-import com.ushahidi.java.sdk.api.json.Response;
 
 /**
  * @author oyewale
@@ -241,33 +237,7 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 				
 				id = report.getDbId();
 				log("report saved");
-				ReportFields rf = new ReportFields();
-				rf.fill(incident);
-				rf.addCategory(1);
-				List<File> file = new ArrayList<File>();
-				for (ImageToLoad photo : pendingPhoto.getItems()){
-					String path = ((ImageToLoadBitmap)photo).getPath();
-					file.add(new File(path));			
-				}
-				if (file.size() > 0){
-					log("Added "+file.size()+" photos to the report");
-					rf.addPhotos(file);
-				}
-				
-				
-				//rf.add
-				final ReportFields rf2 = rf;
-				
-				new Thread(new Runnable() {
-					
-					@Override
-					public void run() {
-						// TODO Auto-generated method stub
-						ReportsApi reportsApi = new ReportsApi();
-						Response response = reportsApi.submitReport(rf2);
-						log(response.getErrorCode()+": "+response.getErrorMessage());
-					}
-				}).start();
+				finish();
 			} else {
 				return false;
 			}
@@ -505,5 +475,12 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 	public void onDisconnected() {
 		// TODO Auto-generated method stub
 		log("Location Service DisConnected");
+	}
+	
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		reportHelper.close();
+		super.onDestroy();
 	}
 }

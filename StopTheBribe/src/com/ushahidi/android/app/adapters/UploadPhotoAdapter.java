@@ -97,21 +97,21 @@ public class UploadPhotoAdapter extends BaseListAdapter<PhotoEntity> {
      */
     @Override
     public void refresh() {
-        mListPhotoModel = new ListPhotoModel();
+        mListPhotoModel = new ListPhotoModel(context);
         items = mListPhotoModel.getPendingPhotos(context);
         this.setItems(items);
 
     }
 
     public void refresh(int reportId) {
-        mListPhotoModel = new ListPhotoModel();
+        mListPhotoModel = new ListPhotoModel(context);
         items = mListPhotoModel.getPendingPhotosByReportId(reportId);
         this.setItems(items);
 
     }
 
     public List<File> pendingPhotos(int reportId) {
-        mListPhotoModel = new ListPhotoModel();
+        mListPhotoModel = new ListPhotoModel(context);
         items = mListPhotoModel.getPendingPhotosByReportId(reportId);
         return getPhotos(items);
     }
@@ -119,8 +119,7 @@ public class UploadPhotoAdapter extends BaseListAdapter<PhotoEntity> {
     private List<File> getPhotos(List<PhotoEntity> photoEntities) {
         List<File> photos = new ArrayList<File>();
         for (PhotoEntity photo : photoEntities) {
-            photos.add(new File(ImageManager.getPhotoPath(context,
-                    photo.getPhoto())));
+            photos.add(new File(photo.getPhoto()));
 
         }
 

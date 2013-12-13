@@ -25,6 +25,10 @@ public class ReportHelper extends Model {
 	public ReportHelper(Context context){
 		db = new Database(context).open();
 	}
+	
+	public void close(){
+		db.close();
+	}
 
 	public boolean addPendingReport(ReportEntity report,
 			Vector<Integer> category, List<ImageToLoad> pendingPhotos, String news) {

@@ -30,11 +30,7 @@
             android:name="org.ekokonnect.stopthebribe.LoginActivity"
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize|stateVisible" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>            
+                        
         </activity>        
         <activity
             android:name="org.ekokonnect.stopthebribe.MakeReportActivity"
@@ -47,7 +43,11 @@
         <activity
             android:name="org.ekokonnect.stopthebribe.ReportListActivity"
             android:label="@string/title_activity_report_list">
-            
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         
         <activity

@@ -46,6 +46,10 @@ public class ListReportModel{
 		db = new Database(context);
 		db.open();
 	}
+	
+	public void close(){
+		db.close();
+	}
 
 	public boolean load() {
 		mReports = db.mReportDao.fetchAllReports();

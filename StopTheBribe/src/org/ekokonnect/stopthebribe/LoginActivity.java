@@ -1,5 +1,7 @@
 package org.ekokonnect.stopthebribe;
 
+import java.util.Arrays;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -33,6 +35,7 @@ import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailed
 import com.google.android.gms.plus.PlusClient;
 import com.google.android.gms.plus.model.people.Person;
 import com.google.android.gms.plus.model.people.Person.Image;
+import com.ushahidi.android.app.Preferences;
 
 
 /**
@@ -53,6 +56,13 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
 	private ProgressDialog mConnectionProgressDialog;
 	private PlusClient mPlusClient;
 	private ConnectionResult mConnectionResult;
+	private UiLifecycleHelper uiHelper;
+	private Session.StatusCallback callback = new Session.StatusCallback() {
+	    @Override
+	    public void call(Session session, SessionState state, Exception exception) {
+	        onSessionStateChange(session, state, exception);
+	    }
+	};
 
 	// Values for email and password at the time of the login attempt.
 	private String mEmail;
@@ -76,14 +86,14 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
 		super.onCreate(savedInstanceState);
 		
 		//Check if a user has been logged in
-		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-		mFirstName = preferences.getString("Firstname", null);
-		mLastName = preferences.getString("Lastname", null);
-		
-		if(mFirstName != null && mLastName != null){
-			Intent intent = new Intent(getApplicationContext(), ReportListActivity.class);
-			startActivity(intent);
-		}
+//		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//		mFirstName = preferences.getString("Firstname", null);
+//		mLastName = preferences.getString("Lastname", null);
+//		
+//		if(mFirstName != null && mLastName != null){
+//			Intent intent = new Intent(getApplicationContext(), ReportListActivity.class);
+//			startActivity(intent);
+//		}
 		
 
 		setContentView(R.layout.activity_login);
@@ -117,14 +127,16 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
 					}
 				});
 		
-		mFacebookLogin.setReadPermissions("email");
-		mFacebookLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            	loginMethod = "facebook";
-            	loginToFacebook();
-            }
-        });
+		mFacebookLogin.setReadPermissions(Arrays.asList("email"));
+		uiHelper = new UiLifecycleHelper(this, callback);
+	    uiHelper.onCreate(savedInstanceState);
+		
+//		mFacebookLogin.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//            	loginMethod = "facebook";            	
+//            }
+//        });
 		
 		googleSigninButton.setOnClickListener(new View.OnClickListener() {
 			
@@ -286,8 +298,7 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
 			showProgress(false);
 
 			if (success) {
-				Intent intent = new Intent(getApplicationContext(), ReportListActivity.class);
-				startActivity(intent);
+				startMainActivity();
 			} else {
 				mEmailView
 						.setError(getString(R.string.error_incorrect_password));
@@ -305,28 +316,42 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
 	
 	
 	//Facebook Validation Methods
-	public void loginToFacebook(){
-        Session.openActiveSession(this, true, new Session.StatusCallback() {
-            @Override
-            public void call(Session session, SessionState state, Exception exception) {
-                Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
-                    @Override
-                    public void onCompleted(GraphUser user, Response response) {
-                        if (user != null) {
-                            mFirstName = user.getFirstName();
-                            mLastName = user.getLastName();
-                            Log.d("name", mFirstName);
-                            mEmail = user.getProperty("email").toString();
-                            mEmail = "";
-                            toSharedPreferences();
-                            Intent intent = new Intent(getApplicationContext(), ReportListActivity.class);
-                            startActivity(intent);
-                        }
-                    }
-                });
-            }
-        });
-    }
+//	public void loginToFacebook(){
+//		//Session.NewPermissionsRequest s = new 
+//        Session.openActiveSession(this, true, new Session.StatusCallback() {
+//            @Override
+//            public void call(Session session, SessionState state, Exception exception) {
+//            	mSession = session;
+//                Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
+//                    @Override
+//                    public void onCompleted(GraphUser user, Response response) {
+//                    	Log.d(TAG, response.toString());
+//                        if (user != null) {
+//                        	
+//                            mFirstName = user.getFirstName();
+//
+//                            //mSession.closeAndClearTokenInformation();
+//                            
+//                            mLastName = user.getLastName();
+////                            user.get
+//                            Log.d(TAG, mFirstName);
+//
+//                            mEmail = user.getProperty("email").toString();
+//                            Log.d(TAG, mEmail );
+//                            //mEmail = "";
+//                            //mSession.closeAndClearTokenInformation();
+//                            
+//                            toSharedPreferences();
+//                            startMainActivity();
+//                            
+//                        }
+//                    }
+//                    
+//                });
+//                
+//            }
+//        });
+//    }
 	
 	// end of facebook methods
 	
@@ -334,6 +359,7 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
 	@Override
 	public void onConnectionFailed(ConnectionResult result) {
 		// TODO Auto-generated method stub
+		Log.d(TAG, result.toString());
 		if (mConnectionProgressDialog.isShowing()){
 			if(result.hasResolution()){
 				 try {
@@ -351,6 +377,7 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
 	@Override
 	public void onConnected(Bundle connectionHint) {
 		// TODO Auto-generated method stub
+		Log.d(TAG, connectionHint.toString());
 		if (mPlusClient.getCurrentPerson() != null) {
 	        Person currentPerson = mPlusClient.getCurrentPerson();
 	        String personName = currentPerson.getDisplayName();
@@ -363,14 +390,21 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
 	        mEmail = email;
 	        Log.i("Login", mFirstName+" "+mLastName+": "+mEmail);
 	        
+	        toSharedPreferences();
+			startMainActivity();
 	    }
 		
 		mConnectionProgressDialog.dismiss();
-		toSharedPreferences();
+		
+	}
+	
+	private void startMainActivity() {
+		// TODO Auto-generated method stub
+		finish();
 		Intent intent = new Intent(getApplicationContext(), ReportListActivity.class);
         startActivity(intent);
 	}
-	
+
 	@Override
     public void onDisconnected() {
         Log.d(TAG, "disconnected");
@@ -380,22 +414,32 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
 	
 	//General Purpose Methods
 	public void toSharedPreferences(){
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("Email", mEmail);
-        editor.putString("Firstname", mFirstName);
-        editor.putString("Lastname", mLastName);
-        editor.commit();
+//        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+//        SharedPreferences.Editor editor = preferences.edit();
+        
+        Preferences.loadSettings(getApplicationContext());
+        Preferences.firstname = mFirstName;
+        Preferences.lastname = mLastName;
+        Preferences.email = mEmail;
+        Preferences.isSignedIn = true;
+        Log.i(TAG, "Saved "+Preferences.firstname+
+        		":"+Preferences.lastname+":"+Preferences.email+" >> SharedPref");
+        Preferences.saveSettings(getApplicationContext());
+        
+//        editor.putString("Email", mEmail);
+//        editor.putString("Firstname", mFirstName);
+//        editor.putString("Lastname", mLastName);
+//        editor.commit();
     }
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
-		if(loginMethod == "facebook"){
+		Log.d(TAG, "OnActivityResult");
+//		if(loginMethod == "facebook"){
 			super.onActivityResult(requestCode, resultCode, data);
-			Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
-		}
+			uiHelper.onActivityResult(requestCode, resultCode, data);			
+//		}
 		
 		if(loginMethod == "google"){
 			if (requestCode == REQUEST_CODE_RESOLVE_ERR && resultCode == RESULT_OK) {
@@ -406,11 +450,46 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
 		
 	}
 	
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		
+		Session session = Session.getActiveSession();
+	    if (session != null &&
+	           (session.isOpened() || session.isClosed()) ) {
+	        onSessionStateChange(session, session.getState(), null);
+	    }
+
+	    uiHelper.onResume();		
+	}
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		// TODO Auto-generated method stub
+		super.onSaveInstanceState(outState);
+		uiHelper.onSaveInstanceState(outState);
+	}
+	
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		uiHelper.onDestroy();
+	}
+	
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		uiHelper.onPause();
+	}
+	
 	 @Override
 	    protected void onStart() {
 	        super.onStart();
 	        //if(loginMethod == "google"){
-	        	mPlusClient.connect();
+	        	//mPlusClient.connect();
 	        //}
 	        
 	    }
@@ -420,9 +499,47 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
 	        super.onStop();
 	        //if(loginMethod=="google"){
 	        	mPlusClient.disconnect();
+	        	
 	        //}
 	        
 	    }
 	//End of general Purpose Methods
 	
+	    @SuppressWarnings("deprecation")
+		private void onSessionStateChange(Session session, SessionState state, Exception exception) {
+	        if (state.isOpened()) {
+	            Log.i(TAG, "Logged in...");
+	            Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
+                  @Override
+                  public void onCompleted(GraphUser user, Response response) {
+                  	Log.d(TAG, response.toString());
+                      if (user != null) {
+                      	
+                          mFirstName = user.getFirstName();
+
+//                          session.closeAndClearTokenInformation();
+                          
+                          mLastName = user.getLastName();
+//                          user.get
+                          Log.d(TAG, mFirstName);
+
+                          mEmail = user.getProperty("email").toString();
+                          Log.d(TAG, mEmail );
+                          //mEmail = "";
+                          //mSession.closeAndClearTokenInformation();
+                          
+                          toSharedPreferences();
+                          startMainActivity();
+                          
+                      }
+                  }
+                  
+              });
+              
+          
+	        } else if (state.isClosed()) {
+	            Log.i(TAG, "Logged out...");
+	        }
+	    }
+	    
 }

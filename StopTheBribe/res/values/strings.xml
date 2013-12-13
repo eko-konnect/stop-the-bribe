@@ -1,16 +1,18 @@
-<resources>
-	<string name="title_activity_report_list">Reports</string>
-	<string name="title_activity_view_report">Report</string>
+<resources>	
     
-    <string name="app_name">Stop The Bribe</string>
-    <string name="empty_list">No Reports</string>
-    <string name="action_create_report">Create A Report</string>
-    <string name="action_search">Search</string>
-    <string name="action_settings">Settings</string>
-    <string name="action_logout">Sign Out</string>
-    <string name="action_share">Share</string>
-    <string name="app_id">178981618964256</string>
+    <string name="app_name">Stop The Bribe</string>   
+        
+    <string name="app_id">772894102724501</string>
     <string name="google_map_api_key">AIzaSyDx7-XL7cSgh7iCMCG99z14ZZKawV6jLr0</string>
     <string name="deployment_url">http://stopthebribes.net</string>
+    
+    <string name="loading">Loading..</string>
+    <string name="uploading">Uploading..</string>
+    <string name="uploaded">Uploaded</string>
+    <string name="failed">Failed..</string>
+    <string name="internet_connection">Network Error</string>
+    <string name="connection_timeout">Failed..</string>
+    <string name="could_not_fetch_reports">Failed..</string>
+    
 
 </resources>

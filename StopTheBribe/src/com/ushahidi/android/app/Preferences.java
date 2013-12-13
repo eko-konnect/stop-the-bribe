@@ -28,7 +28,7 @@ public class Preferences {
 	
 	public static String mapTiles = "";
 
-	public static String fileName = "";
+	public static String fileName = "StopTheBribe";
 
 	public static int isCheckinEnabled = 0;
 
@@ -58,6 +58,7 @@ public class Preferences {
 	public static String phonenumber = "";
 	public static String ogsPluginVersion = "";
 	public static String openGeoSmsUrl = "http://maps.google.com/";
+	public static boolean isSignedIn = false;
 
 	public static void loadSettings(Context context) {
 		final SharedPreferences settings = context.getSharedPreferences(
@@ -74,6 +75,7 @@ public class Preferences {
 		firstname = settings.getString("Firstname", "");
 		lastname = settings.getString("Lastname", "");
 		email = settings.getString("Email", "");
+		isSignedIn = settings.getBoolean("isSignedIn", Preferences.isSignedIn);
 		
 		totalReports = settings.getString("TotalReports", "20");
 		mapTiles = settings.getString("MapTiles", "google");
@@ -126,6 +128,11 @@ public class Preferences {
 		editor.putString("Phonenumber", phonenumber);
 		editor.putString("OgsPluginVersion", ogsPluginVersion);
 		editor.putString("MapTiles", mapTiles);
+		editor.putBoolean("isSignedIn", isSignedIn);
+		editor.putString("Firstname", firstname);
+		editor.putString("Lastname", lastname);
+		editor.putString("Email", email);
+		
 		editor.commit();
 	}
 }

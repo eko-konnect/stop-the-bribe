@@ -516,16 +516,16 @@ containing a value of this type.
         public static final int viewreport=0x7f0b0004;
     }
     public static final class string {
-        public static final int action_create_report=0x7f060037;
-        public static final int action_forgot_password=0x7f060046;
-        public static final int action_login=0x7f060043;
-        public static final int action_logout=0x7f06003a;
-        public static final int action_search=0x7f060038;
-        public static final int action_settings=0x7f060039;
-        public static final int action_share=0x7f06003b;
-        public static final int action_sign_in_register=0x7f060044;
-        public static final int action_sign_in_short=0x7f060045;
-        public static final int app_id=0x7f06003c;
+        public static final int action_create_report=0x7f060051;
+        public static final int action_forgot_password=0x7f060045;
+        public static final int action_login=0x7f060042;
+        public static final int action_logout=0x7f060054;
+        public static final int action_search=0x7f060052;
+        public static final int action_settings=0x7f060053;
+        public static final int action_share=0x7f060057;
+        public static final int action_sign_in_register=0x7f060043;
+        public static final int action_sign_in_short=0x7f060044;
+        public static final int app_id=0x7f060034;
         public static final int app_name=0x7f060000;
         /**   Title for notification shown when GooglePlayServices needs to be
         enabled for a application to work. [CHAR LIMIT=70] 
@@ -646,29 +646,36 @@ containing a value of this type.
         /**  Long form sign-in button text [CHAR LIMIT=30] 
          */
         public static final int common_signin_button_text_long=0x7f060014;
-        public static final int deployment_url=0x7f06003e;
-        public static final int empty_list=0x7f060036;
-        public static final int error_field_required=0x7f06004b;
-        public static final int error_incorrect_password=0x7f06004a;
-        public static final int error_invalid_email=0x7f060048;
-        public static final int error_invalid_password=0x7f060049;
-        public static final int facebook_sigin=0x7f06004d;
-        public static final int google_map_api_key=0x7f06003d;
-        public static final int google_signin=0x7f06004c;
-        public static final int login_progress_signing_in=0x7f060047;
+        public static final int connection_timeout=0x7f06003c;
+        public static final int could_not_fetch_reports=0x7f06003d;
+        public static final int deployment_url=0x7f060036;
+        public static final int empty_list=0x7f060055;
+        public static final int error_field_required=0x7f06004a;
+        public static final int error_incorrect_password=0x7f060049;
+        public static final int error_invalid_email=0x7f060047;
+        public static final int error_invalid_password=0x7f060048;
+        public static final int facebook_sigin=0x7f06004c;
+        public static final int failed=0x7f06003a;
+        public static final int google_map_api_key=0x7f060035;
+        public static final int google_signin=0x7f06004b;
+        public static final int internet_connection=0x7f06003b;
+        public static final int loading=0x7f060037;
+        public static final int login_progress_signing_in=0x7f060046;
         /**  Strings related to login 
          */
-        public static final int prompt_email=0x7f060040;
-        public static final int prompt_firstname=0x7f060041;
-        public static final int prompt_lastname=0x7f060042;
-        public static final int report_description_edittext_hint_activity_make_report=0x7f060050;
-        public static final int report_title_edittext_hint_activity_make_report=0x7f06004f;
-        public static final int title_activity_login=0x7f06003f;
+        public static final int prompt_email=0x7f06003f;
+        public static final int prompt_firstname=0x7f060040;
+        public static final int prompt_lastname=0x7f060041;
+        public static final int report_description_edittext_hint_activity_make_report=0x7f06004f;
+        public static final int report_title_edittext_hint_activity_make_report=0x7f06004e;
+        public static final int title_activity_login=0x7f06003e;
         /**  Make Report Activity 
          */
-        public static final int title_activity_make_report=0x7f06004e;
-        public static final int title_activity_report_list=0x7f060034;
-        public static final int title_activity_view_report=0x7f060035;
+        public static final int title_activity_make_report=0x7f06004d;
+        public static final int title_activity_report_list=0x7f060050;
+        public static final int title_activity_view_report=0x7f060056;
+        public static final int uploaded=0x7f060039;
+        public static final int uploading=0x7f060038;
     }
     public static final class style {
         /** 

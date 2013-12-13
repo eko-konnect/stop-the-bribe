@@ -161,7 +161,7 @@ public class ViewReportActivity extends Activity {
 	
 	private void setListPhotos(int reportId) {
 		
-			ListPhotoModel mListPhotoModel = new ListPhotoModel();
+			ListPhotoModel mListPhotoModel = new ListPhotoModel(getApplicationContext());
 //			final boolean loaded = mListPhotoModel.load(reportId);
 //			int totalPhotos = mListPhotoModel.totalReportPhoto();
 //			if (loaded) {
