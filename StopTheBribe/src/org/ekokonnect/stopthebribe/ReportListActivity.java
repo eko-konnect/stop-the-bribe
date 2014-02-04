@@ -46,6 +46,8 @@ public class ReportListActivity extends FragmentActivity implements ReportListFr
             	Log.d(TAG, "App is running for firstime");
                 // refreshReports();
                 Preferences.appRunsFirstTime = 1;
+                Preferences.serviceStatus = 1;
+                
                 Preferences.saveSettings(this);
                 startService(new Intent(this, FetchReports.class));
                 //return true;

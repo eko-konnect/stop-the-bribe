@@ -80,7 +80,7 @@ public class ReportListFragment extends ListFragment {
 	private boolean refreshState = false;
 	private FetchedReportListAdapter fetchedAdapter;
 	private PendingReportListAdapter pendingAdapter;
-	
+	private View progressView;
 
 	/**
 	 * A callback interface that all activities containing this fragment must
@@ -110,6 +110,8 @@ public class ReportListFragment extends ListFragment {
             if (intent != null) {
                 try {
                     getActivity().unregisterReceiver(broadcastReceiver);
+                    refreshReportLists();
+                    showProgress(false);
                 } catch (IllegalArgumentException e) {
                 	e.printStackTrace();
                 }
@@ -119,6 +121,15 @@ public class ReportListFragment extends ListFragment {
             }
         }
     };
+    
+    void showProgress(boolean b){
+    	if (b){
+    		progressView.setVisibility(View.VISIBLE);
+    	} else {
+    		progressView.setVisibility(View.GONE);
+    	}
+    	
+    }
 
 	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the
@@ -131,9 +142,7 @@ public class ReportListFragment extends ListFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		fetchedAdapter = new FetchedReportListAdapter(getActivity());
-		//fetchedAdapter.refresh();
-		pendingAdapter = new PendingReportListAdapter(getActivity());
+		loadAdapters();
 		//pendingAdapter.refresh();
 		
 		setListAdapter(fetchedAdapter);
@@ -141,13 +150,27 @@ public class ReportListFragment extends ListFragment {
 		setHasOptionsMenu(true);
 	}	
 	
+	void loadAdapters(){
+		fetchedAdapter = new FetchedReportListAdapter(getActivity());
+		//fetchedAdapter.refresh();
+		pendingAdapter = new PendingReportListAdapter(getActivity());
+	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		View view = inflater.inflate(R.layout.activity_report_list, container, false);	
 
+		progressView = (View) view.findViewById(R.id.progressContainer);
 		
+		Preferences.loadSettings(getActivity());
+		int serviceStatus = Preferences.serviceStatus;
+		if (serviceStatus == 1){
+			showProgress(true);
+		} else {
+			showProgress(false);
+		}
 		// Restore the previously serialized activated item position.
 		if (savedInstanceState != null
 				&& savedInstanceState.containsKey(STATE_ACTIVATED_POSITION)) {

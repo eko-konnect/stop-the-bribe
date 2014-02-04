@@ -56,7 +56,7 @@ public class ReportDetailFragment extends Fragment {
 	private ArrayList<ImageToLoad> images;
 	private HorizontalImageScrollerAdapter pendingPhoto;
 	private HorizontalImageScroller scroller;
-	
+	private ShareActionProvider mShareActionProvider;
 	private GoogleMap mMap;
 	private MapView mMapView;
 	public static final String ARG_ITEM_ID = "report_id";
@@ -131,14 +131,13 @@ public class ReportDetailFragment extends Fragment {
         super.onResume();        
     }
 	
-	@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.viewreport, menu);
-//		MenuItem item = menu.findItem(R.id.menu_item_share);
+		MenuItem item = menu.findItem(R.id.action_share);
 		
-//		mShareActionProvider = (ShareActionProvider)item.getActionProvider();
-//		mShareActionProvider.setShareIntent(getDefaultShareIntent());
+		mShareActionProvider = (ShareActionProvider)item.getActionProvider();
+		mShareActionProvider.setShareIntent(getDefaultShareIntent());
 //		return true;
 	}
 	//This method shares the content of the tip(plain text) using a ShareActionProvider.
@@ -151,6 +150,31 @@ public class ReportDetailFragment extends Fragment {
 		return sendIntent;
 	}
 	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// TODO Auto-generated method stub
+		switch (item.getItemId()) {
+		case R.id.action_share:
+			Intent intent = new Intent(Intent.ACTION_SEND);
+		    intent.setType("text/plain");		    
+		    intent.putExtra(Intent.EXTRA_SUBJECT, editTitle.getText());
+		    intent.putExtra(Intent.EXTRA_TEXT, editDescription.getText()+ " \n\n-via StopTheBribe for Android Phones");
+			doShare(intent);
+			return true;
+		case android.R.id.home:
+			
+			return true;			
+		default:
+			return false;
+		}
+//		return super.onOptionsItemSelected(item);
+	}
+	
+	// Somewhere in the application.
+	  public void doShare(Intent shareIntent) {
+	      // When you want to share set the share intent.
+	      mShareActionProvider.setShareIntent(shareIntent);
+	  }
 
 	private void initializeMap(Incident inc, Bundle bundle){
 		mMapView.onCreate(bundle);
