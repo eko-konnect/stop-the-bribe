@@ -2,14 +2,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:padding="10dip"
+    android:orientation="vertical"
+    android:background="@drawable/my_bg" >
     
     <ListView 
         android:id="@android:id/list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:divider="#000"
-        android:dividerHeight="2dp"
+        android:background="#fff"
+        android:divider="@drawable/my_bg"
+        android:dividerHeight="15dip"
         ></ListView>
     
     <TextView 

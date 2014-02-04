@@ -6,4 +6,8 @@
     -->
     <dimen name="activity_horizontal_margin">128dp</dimen>
 
+    <dimen name="bigfont">32sp</dimen>
+    <dimen name="smallfont">24sp</dimen>
+    <dimen name="verysmallfont">18sp</dimen>
+    
 </resources>

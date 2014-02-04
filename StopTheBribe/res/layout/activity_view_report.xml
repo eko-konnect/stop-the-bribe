@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingRight="16dip"
+    android:paddingLeft="16dip"
+    android:background="@drawable/my_bg">
     <LinearLayout
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
@@ -12,15 +17,17 @@
 		    android:layout_width="fill_parent"
 		    android:layout_height="wrap_content"
 		    android:textStyle="bold"
-		    android:textSize="18sp"
-		    android:paddingLeft="5dp"
+		    android:textSize="@dimen/bigfont"		    
 		    android:paddingTop="5dp"
+		    
+		    android:text="Report Title"
+		    android:textColor="#2E305F"
 		 />
 		<LinearLayout
 		    android:layout_width="fill_parent"
 		    android:layout_height="wrap_content"
 		    android:orientation="horizontal"
-		    android:paddingLeft="5dp"
+		    
 		    android:paddingTop="5dp">
 			<TextView
 			    android:id="@+id/reportAuthor"
@@ -28,17 +35,24 @@
 			    android:layout_height="wrap_content"
 			    android:textStyle="italic"
 			    android:layout_weight="2"
-			    
+			    android:text="Author"
+			    android:textColor="#333"
+			    android:textSize="@dimen/verysmallfont"
 			    />
 			
 			<TextView
 			    android:id="@+id/reportDate"
 			    android:layout_width="wrap_content"
 			    android:layout_height="wrap_content"
-			    android:textStyle="bold"
+			    android:gravity="right"
 			    android:layout_weight="1"
+			    android:text="Date"
+			    android:textColor="#333"
+			    android:textSize="@dimen/verysmallfont"
 			  	/>
 		</LinearLayout>
+		
+		
 		
 		<com.twotoasters.android.horizontalimagescroller.widget.HorizontalImageScroller 
 	        android:id="@+id/view_report_photo" 
@@ -49,20 +63,23 @@
 		    android:id="@+id/reportPlace"
 		    android:layout_width="fill_parent"
 		    android:layout_height="wrap_content"
-		    android:layout_gravity="right"
-		    android:gravity="right"/>
+		    android:layout_gravity="left"
+		    android:gravity="left"
+		    android:paddingBottom="5dip"
+		    android:text="No Place"/>
 		
 		<TextView
 		    android:id="@+id/reportDescription"
 		    android:layout_width="fill_parent"
 		    android:layout_height="wrap_content"
-		    android:padding="5dp" />
+		    android:padding="5dp"
+		    android:textSize="@dimen/smallfont"
+		    android:background="#fff" />
 		
 		<LinearLayout
             android:id="@+id/map_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/com_facebook_blue"
+            android:layout_height="wrap_content"            
             android:orientation="vertical"
             android:padding="10dip" >
 

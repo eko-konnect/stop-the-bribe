@@ -1,57 +1,98 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".MakeReportActivity"
-     android:orientation="vertical">
-    
-    <LinearLayout 
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <EditText 
-	        android:id="@+id/make_report_title_text"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:hint="@string/report_title_edittext_hint_activity_make_report"
-	        android:inputType="text"
-	        android:maxLines="1"/>
-	    
-	    <Spinner
-	        android:id="@+id/make_report_category_spinner"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:paddingTop="@dimen/activity_vertical_padding"/>
-	    
-	    <EditText 
-	        android:id="@+id/make_report_description"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:hint="@string/report_description_edittext_hint_activity_make_report"
-	        android:minLines="3"
-	        android:inputType="text|textMultiLine|textLongMessage"
-	        android:paddingTop="@dimen/activity_vertical_padding"/>
-	    
-	    
-	    <com.twotoasters.android.horizontalimagescroller.widget.HorizontalImageScroller 
-	        android:id="@+id/make_report_gallery_listview" 
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content" />
+    android:background="@drawable/my_bg"
+    android:paddingBottom="6dip"
+    android:paddingTop="6dip"
+	android:paddingLeft="6dip"
+	android:paddingRight="6dip"    
+	tools:context=".MakeReportActivity">    
 
+    <ScrollView 
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"	    
+	     android:orientation="vertical"
+	     android:paddingRight="10dip"
+	     android:paddingLeft="10dip"
+	     android:paddingBottom="15dip"
+	     android:background="#fff">
+	    
+	    <LinearLayout 
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:orientation="vertical">
 	        
-	    
-	    <Button 
-	        android:id="@+id/make_report_button"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:gravity="center"
-	        android:text="Report"
-	        android:paddingTop="@dimen/activity_vertical_padding"/>
-    </LinearLayout>
-   
-
-</ScrollView>
+	        <LinearLayout 
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:paddingRight="40dip">
+	            <TextView 
+		            android:layout_height="60dip"
+		            android:layout_width="fill_parent"
+		            android:text="Add Images to the Report"
+		            android:textColor="#fff"
+		            android:textStyle="bold"
+		            android:gravity="center"
+		            android:paddingTop="30dip"
+		            android:paddingBottom="10dip"            
+		            android:background="@drawable/topp_bubble"/>
+	        </LinearLayout>
+	        
+	        
+	        <EditText 
+		        android:id="@+id/make_report_title_text"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:hint="@string/report_title_edittext_hint_activity_make_report"
+		        android:inputType="text"
+		        android:paddingTop="30dip"
+		        android:maxLines="1"/>
+		    
+		    <Spinner
+		        android:id="@+id/make_report_category_spinner"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:paddingTop="@dimen/activity_vertical_padding"/>
+		    
+		    <EditText 
+		        android:id="@+id/make_report_description"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:hint="@string/report_description_edittext_hint_activity_make_report"
+		        android:minLines="3"
+		        android:inputType="text|textMultiLine|textLongMessage"
+		        android:paddingTop="@dimen/activity_vertical_padding"
+		        android:paddingBottom="@dimen/activity_vertical_padding"/>
+		    
+		    
+		    
+		    
+		    <com.twotoasters.android.horizontalimagescroller.widget.HorizontalImageScroller 
+		        android:id="@+id/make_report_gallery_listview" 
+			    android:layout_width="match_parent"
+			    android:layout_height="wrap_content" />
+	
+		    <CheckBox
+		        android:id="@+id/checkBox1"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:paddingTop="@dimen/activity_vertical_padding"
+		        android:paddingBottom="@dimen/activity_vertical_padding"
+		        android:text="Report Anonymously" 
+		        android:textColor="#444"/>
+		    
+		    <Button 
+		        android:id="@+id/make_report_button"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:gravity="center"
+		        android:textColor="#fff"
+		        android:text="Report"
+		        android:background="@drawable/bluebutton"
+		        android:paddingTop="@dimen/activity_vertical_padding"/>
+	    </LinearLayout>
+	   
+	
+	</ScrollView>
+</FrameLayout>
