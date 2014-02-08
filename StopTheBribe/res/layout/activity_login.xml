@@ -81,14 +81,14 @@
 	                android:layout_height="wrap_content"
 	                android:orientation="vertical" >
 	                
-	                <com.google.android.gms.common.SignInButton
+	                <!--com.google.android.gms.common.SignInButton
 		                android:id="@+id/google_signin"
 		                android:layout_width="match_parent"
 					    android:layout_height="wrap_content"
 		                android:layout_gravity="center"
 	
 		                android:layout_marginTop="5dip"
-		                android:text="@string/common_signin_button_text_long"/>
+		                android:text="@string/common_signin_button_text_long"/-->
 		            
 		            <com.facebook.widget.LoginButton
 		                android:id="@+id/facebook_sigin"

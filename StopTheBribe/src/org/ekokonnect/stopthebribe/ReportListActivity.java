@@ -6,7 +6,10 @@ import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.facebook.Session;
 import com.ushahidi.android.app.Preferences;
 import com.ushahidi.android.app.models.ListReportModel;
 import com.ushahidi.android.app.services.FetchReports;
@@ -85,7 +88,7 @@ public class ReportListActivity extends FragmentActivity implements ReportListFr
 		return true;
 	}
 	
-	/*@Override
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// TODO Auto-generated method stub
 		int id = item.getItemId();
@@ -94,8 +97,13 @@ public class ReportListActivity extends FragmentActivity implements ReportListFr
 			startActivity(new Intent(getApplicationContext(), MakeReportActivity.class));
 			break;
 		case R.id.action_logout:
-			logout();
+			//logout();
+			finish();
+			startActivity(new Intent(getApplicationContext(), LogoutActivity.class));
+			
 			break;
+		case R.id.action_settings:
+			startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
 		default:
 			break;
 		}
@@ -114,10 +122,18 @@ public class ReportListActivity extends FragmentActivity implements ReportListFr
 		if (session != null){
 			session.closeAndClearTokenInformation();
 		}
+		Session.setActiveSession(null);
+		Preferences.loadSettings(getApplicationContext());
+		if(Preferences.isSignedIn){
+			Toast.makeText(getApplicationContext(), "not logged out", Toast.LENGTH_LONG).show();
+		}else{
+			Toast.makeText(getApplicationContext(), "logged out", Toast.LENGTH_LONG).show();
+		}
+		Preferences.saveSettings(getApplicationContext());
 		
 		finish();
-		startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-	}*/
+		startActivity(new Intent(getApplicationContext(), ReportListActivity.class));
+	}
 
 	/**
 	 * Callback method from {@link PlaceListFragment.Callbacks} indicating that
