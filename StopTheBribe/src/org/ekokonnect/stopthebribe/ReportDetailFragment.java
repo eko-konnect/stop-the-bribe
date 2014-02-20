@@ -141,26 +141,26 @@ public class ReportDetailFragment extends Fragment {
 //		return true;
 	}
 	//This method shares the content of the tip(plain text) using a ShareActionProvider.
-	private Intent getDefaultShareIntent(){
-		Intent sendIntent = new Intent();
-		sendIntent.setAction(Intent.ACTION_SEND);
-//		sendIntent.putExtra(Intent.EXTRA_TEXT, content);
-		sendIntent.setType("text/plain");
-		
-		return sendIntent;
+	private Intent getDefaultShareIntent() {
+	    Intent intent = new Intent(Intent.ACTION_SEND);
+	    intent.setType("text/plain");
+	    intent.putExtra(Intent.EXTRA_SUBJECT, inc.getTitle());
+	    intent.putExtra(Intent.EXTRA_TEXT, inc.getDescription()+ "\n\n-via StopTheBribe App for Android");
+	    
+	    return intent;
 	}
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// TODO Auto-generated method stub
 		switch (item.getItemId()) {
-		case R.id.action_share:
-			Intent intent = new Intent(Intent.ACTION_SEND);
-		    intent.setType("text/plain");		    
-		    intent.putExtra(Intent.EXTRA_SUBJECT, editTitle.getText());
-		    intent.putExtra(Intent.EXTRA_TEXT, editDescription.getText()+ " \n\n-via StopTheBribe for Android Phones");
-			doShare(intent);
-			return true;
+//		case R.id.action_share:
+//			Intent intent = new Intent(Intent.ACTION_SEND);
+//		    intent.setType("text/plain");		    
+//		    intent.putExtra(Intent.EXTRA_SUBJECT, editTitle.getText());
+//		    intent.putExtra(Intent.EXTRA_TEXT, editDescription.getText()+ " \n\n-via StopTheBribe for Android Phones");
+//			doShare(intent);
+//			return true;
 		case android.R.id.home:
 			
 			return true;			

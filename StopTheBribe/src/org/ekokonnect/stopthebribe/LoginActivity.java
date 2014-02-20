@@ -112,7 +112,6 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
 		//Google Requirements
 		mPlusClient = new PlusClient.Builder(this, this, this)
         .setActions("http://schemas.google.com/AddActivity")
-        .setScopes("PLUS_LOGIN")  // Space separated list of scopes
         .build();
 // Progress bar to be displayed if the connection failure is not resolved.
 		mConnectionProgressDialog = new ProgressDialog(this);
@@ -139,6 +138,7 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
 		if (!mPlusClient.isConnected()) {
             if (mConnectionResult == null) {
                 mConnectionProgressDialog.show();
+                mPlusClient.connect();
             } else {
                 try {
                     mConnectionResult.startResolutionForResult(this, REQUEST_CODE_RESOLVE_ERR);
@@ -232,7 +232,8 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
 	@Override
 	public void onConnected(Bundle connectionHint) {
 		// TODO Auto-generated method stub
-		Log.d(TAG, connectionHint.toString());
+//		Log.d(TAG, connectionHint.toString());
+		showProgress(true);
 		if (mPlusClient.getCurrentPerson() != null) {
 	        Person currentPerson = mPlusClient.getCurrentPerson();
 	        String personName = currentPerson.getDisplayName();
@@ -290,12 +291,11 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
 			super.onActivityResult(requestCode, resultCode, data);
 			uiHelper.onActivityResult(requestCode, resultCode, data);			
 		
-		if(loginMethod == "google"){
+		
 			if (requestCode == REQUEST_CODE_RESOLVE_ERR && resultCode == RESULT_OK) {
 		        mConnectionResult = null;
 		        mPlusClient.connect();
 		    }
-		}
 		
 	}
 	
