@@ -23,12 +23,12 @@
     -->
 
     <fragment
-        android:id="@+id/report_list"
+        android:id="@+id/report_list_fragment"
         android:name="org.ekokonnect.stopthebribe.ReportListFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        tools:layout="@layout/activity_report_list" />
+        tools:layout="@layout/activity" />
 
     <FrameLayout
         android:id="@+id/report_detail_container"

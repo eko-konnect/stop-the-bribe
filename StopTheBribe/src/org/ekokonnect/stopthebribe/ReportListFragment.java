@@ -160,7 +160,7 @@ public class ReportListFragment extends ListFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		View view = inflater.inflate(R.layout.activity_report_list, container, false);	
+		View view = inflater.inflate(R.layout.activity_reportlist, container, false);	
 
 		progressView = (View) view.findViewById(R.id.progressContainer);
 		

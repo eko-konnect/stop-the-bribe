@@ -21,7 +21,7 @@ public final class R {
 	}
 	public static final class id {
 		public static final int image = 0x7f05002c;
-		public static final int image_frame = 0x7f05006f;
+		public static final int image_frame = 0x7f050070;
 	}
 	public static final class layout {
 		public static final int horizontal_image_scroller_item = 0x7f03002f;

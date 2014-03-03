@@ -27,7 +27,7 @@ public class ReportListActivity extends FragmentActivity implements ReportListFr
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.fragment_report_list);
+		setContentView(R.layout.activity_report_list);
 		
 		Preferences.loadSettings(getApplicationContext());
 		if (!Preferences.isSignedIn){
@@ -71,7 +71,7 @@ public class ReportListActivity extends FragmentActivity implements ReportListFr
 			// In two-pane mode, list items should be given the
 			// 'activated' state when touched.
 			((ReportListFragment) getSupportFragmentManager().findFragmentById(
-					R.id.report_list)).setActivateOnItemClick(true);
+					R.id.report_list_fragment)).setActivateOnItemClick(true);
 		}
 							
 		
