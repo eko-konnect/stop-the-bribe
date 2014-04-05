@@ -8,25 +8,25 @@ package com.twotoasters.android.horizontalimagescroller;
 
 public final class R {
 	public static final class color {
-		public static final int default_frame_color = 0x7f060000;
-		public static final int default_frame_off_color = 0x7f060001;
-		public static final int default_transparent_color = 0x7f060002;
+		public static final int default_frame_color = 0x7f08000d;
+		public static final int default_frame_off_color = 0x7f08000e;
+		public static final int default_transparent_color = 0x7f08000f;
 	}
 	public static final class dimen {
-		public static final int default_image_size = 0x7f070000;
+		public static final int default_image_size = 0x7f090011;
 	}
 	public static final class drawable {
 		public static final int ic_action_search = 0x7f020193;
 		public static final int ic_launcher = 0x7f020194;
 	}
 	public static final class id {
-		public static final int image = 0x7f09002c;
-		public static final int image_frame = 0x7f09006f;
+		public static final int image = 0x7f06002c;
+		public static final int image_frame = 0x7f060070;
 	}
 	public static final class layout {
 		public static final int horizontal_image_scroller_item = 0x7f030030;
 	}
 	public static final class string {
-		public static final int app_name = 0x7f080000;
+		public static final int app_name = 0x7f0b0027;
 	}
 }
