@@ -34,6 +34,7 @@ import com.ushahidi.android.app.entities.ReportEntity;
 import com.ushahidi.android.app.models.AddReportModel;
 import com.ushahidi.android.app.models.ListPhotoModel;
 import com.ushahidi.android.app.models.ListReportModel;
+import com.ushahidi.android.app.services.FetchReports;
 import com.ushahidi.android.app.services.SyncServices;
 import com.ushahidi.android.app.tasks.ProgressTask;
 import com.ushahidi.android.app.util.ImageManager;
@@ -109,9 +110,10 @@ public class ReportListFragment extends ListFragment {
         public void onReceive(Context context, Intent intent) {
             if (intent != null) {
                 try {
-                    getActivity().unregisterReceiver(broadcastReceiver);
+                    //getActivity().unregisterReceiver(broadcastReceiver);
                     refreshReportLists();
                     showProgress(false);
+                    Toast.makeText(getActivity(), "New Reports Loaded from Server", Toast.LENGTH_LONG).show();
                 } catch (IllegalArgumentException e) {
                 	e.printStackTrace();
                 }
@@ -262,17 +264,21 @@ Log.e(TAG, "Activated Position: "+ STATE_ACTIVATED_POSITION);
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// TODO Auto-generated method stub
+		Log.d(TAG, item.getTitle().toString());
 		int id = item.getItemId();
 		switch (id) {
-		case R.id.action_create_report:
-			startActivity(new Intent(getActivity().getApplicationContext(), MakeReportActivity.class));
-			break;
-		case R.id.action_logout:
-			logout();
-			break;
-		default:
-			break;
+			case R.id.action_create_report:
+				startActivity(new Intent(getActivity().getApplicationContext(), MakeReportActivity.class));
+				break;
+			case R.id.action_logout:
+				logout();
+				break;
+			case R.id.action_refresh:
+				showProgress(true);
+				getActivity().startService(new Intent(getActivity(), FetchReports.class));
+				break;
+			default:
+				break;
 		}
 //		return super.onOptionsItemSelected(item);
 		return true;

@@ -80,7 +80,7 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
 	private View mLoginFormView;
 	private View mLoginStatusView;
 	private TextView mLoginStatusMessageView;
-	//private View googleSigninButton;
+	private View googleSigninButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +108,7 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
 		mLoginFormView = findViewById(R.id.login_form);
 		mLoginStatusView = findViewById(R.id.login_status);
 		mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
-		//googleSigninButton = (View) findViewById(R.id.google_signin);
+		googleSigninButton = (View) findViewById(R.id.google_signin);
 		
 		//Google Requirements
 		mPlusClient = new PlusClient.Builder(this, this, this)
@@ -123,19 +123,19 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
 		uiHelper = new UiLifecycleHelper(this, callback);
 	    uiHelper.onCreate(savedInstanceState);		
 		
-		/*googleSigninButton.setOnClickListener(new View.OnClickListener() {
+		googleSigninButton.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				googleLogin();
 			}
-		});*/
+		});
 		
 		
 	}
 	
-	/*private void googleLogin(){
+	private void googleLogin(){
 		if (!mPlusClient.isConnected()) {
             if (mConnectionResult == null) {
                 mConnectionProgressDialog.show();
@@ -150,7 +150,7 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
                 }
             }
         }
-	}*/
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

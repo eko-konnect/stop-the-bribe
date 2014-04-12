@@ -91,24 +91,29 @@ public class ReportListActivity extends FragmentActivity implements ReportListFr
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// TODO Auto-generated method stub
-		int id = item.getItemId();
-		switch (id) {
-		case R.id.action_create_report:
-			startActivity(new Intent(getApplicationContext(), MakeReportActivity.class));
-			break;
-		case R.id.action_logout:
-			//logout();
-			finish();
-			startActivity(new Intent(getApplicationContext(), LogoutActivity.class));
-			
-			break;
-		case R.id.action_settings:
-			startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
-		default:
-			break;
-		}
-//		return super.onOptionsItemSelected(item);
-		return true;
+//		int id = item.getItemId();
+//		switch (id) {
+//		case R.id.action_create_report:
+//			startActivity(new Intent(getApplicationContext(), MakeReportActivity.class));
+//			break;
+//		case R.id.action_logout:
+//			//logout();
+//			finish();
+//			startActivity(new Intent(getApplicationContext(), LogoutActivity.class));
+//			
+//			break;
+//		case R.id.action_settings:
+//			startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+//			break;
+//		case R.id.action_refresh:
+//			showProgress(true);
+//			//getActivity().startService(new Intent(getActivity(), FetchReports.class));
+//			break;
+//		default:
+//			break;
+//		}
+		return super.onOptionsItemSelected(item);
+//		return true;
 	}
 	
 	private void logout() {
