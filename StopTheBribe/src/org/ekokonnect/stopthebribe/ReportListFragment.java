@@ -6,11 +6,15 @@ import java.util.List;
 import org.ekokonnect.stopthebribe.adapters.FetchedReportListAdapter;
 import org.ekokonnect.stopthebribe.adapters.PendingReportListAdapter;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.text.TextUtils;
@@ -113,6 +117,7 @@ public class ReportListFragment extends ListFragment {
                     //getActivity().unregisterReceiver(broadcastReceiver);
                     refreshReportLists();
                     showProgress(false);
+                    setRefreshActionButtonState(false);
                     Toast.makeText(getActivity(), "New Reports Loaded from Server", Toast.LENGTH_LONG).show();
                 } catch (IllegalArgumentException e) {
                 	e.printStackTrace();
@@ -123,6 +128,30 @@ public class ReportListFragment extends ListFragment {
             }
         }
     };
+	private Menu optionsMenu;
+	private ProgressDialog pd;
+    
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	public void setRefreshActionButtonState(final boolean refreshing) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
+		    if (optionsMenu != null) {
+		        final MenuItem refreshItem = optionsMenu
+		            .findItem(R.id.action_refresh);
+		        if (refreshItem != null) {
+		            if (refreshing) {
+		                refreshItem.setActionView(R.layout.actionbar_indeterminate_progress);
+		            } else {
+		                refreshItem.setActionView(null);
+		            }
+		        }
+		    }
+		} else {
+			if (refreshing)
+				pd = ProgressDialog.show(getActivity(),"Refreshing","Please Wait...");
+			else
+				pd.dismiss();
+		}
+	}
     
     void showProgress(boolean b){
     	if (b){
@@ -170,8 +199,10 @@ public class ReportListFragment extends ListFragment {
 		int serviceStatus = Preferences.serviceStatus;
 		if (serviceStatus == 1){
 			showProgress(true);
+			setRefreshActionButtonState(true);
 		} else {
 			showProgress(false);
+			setRefreshActionButtonState(false);
 		}
 		// Restore the previously serialized activated item position.
 		if (savedInstanceState != null
@@ -257,6 +288,7 @@ Log.e(TAG, "Activated Position: "+ STATE_ACTIVATED_POSITION);
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 //		MenuInflater inflater = getMenuInflater();
+		this.optionsMenu = menu;
 		Log.d(TAG, "Inflating Menu");
 		inflater.inflate(R.menu.reportlist, menu);
 //		return true;
@@ -275,6 +307,7 @@ Log.e(TAG, "Activated Position: "+ STATE_ACTIVATED_POSITION);
 				break;
 			case R.id.action_refresh:
 				showProgress(true);
+				setRefreshActionButtonState(true);
 				getActivity().startService(new Intent(getActivity(), FetchReports.class));
 				break;
 			default:
