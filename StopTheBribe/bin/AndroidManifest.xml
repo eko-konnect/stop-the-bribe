@@ -5,16 +5,16 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="14"
+        android:minSdkVersion="9"
         android:targetSdkVersion="19" />
-    
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.CAMERA" />   
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
-    <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -25,47 +25,42 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/GreenCustomTheme" >
         <activity
             android:name="org.ekokonnect.stopthebribe.LoginActivity"
-            android:label="@string/title_activity_login"
-            android:windowSoftInputMode="adjustResize|stateVisible" >
-                        
-        </activity>        
+            android:label="@string/title_activity_login" >
+        </activity>
         <activity
             android:name="org.ekokonnect.stopthebribe.MakeReportActivity"
-            android:label="@string/title_activity_make_report">
-            
-            
+            android:label="@string/title_activity_make_report" >
         </activity>
-        <meta-data 
-            android:name="com.facebook.sdk.ApplicationId" android:value="@string/app_id"/>
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/app_id" />
+
         <activity
             android:name="org.ekokonnect.stopthebribe.ReportListActivity"
-            android:label="@string/title_activity_report_list">
+            android:label="@string/title_activity_report_list" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
         <activity
             android:name="org.ekokonnect.stopthebribe.ViewReportActivity"
             android:label="@string/title_activity_view_report"
             android:parentActivityName="org.ekokonnect.stopthebribe.ReportListActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.ekokonnect.stopthebribe.ReportListActivity"/>
-            
+                android:value="org.ekokonnect.stopthebribe.ReportListActivity" />
         </activity>
-        
-        <activity 
-            android:name="com.facebook.LoginActivity"/>
-        
+        <activity android:name="com.facebook.LoginActivity" />
+
         <!-- Services -->
         <service android:name="com.ushahidi.android.app.services.FetchReports" />
-        
+
         <!-- connectivity changed -->
         <receiver
             android:name="com.ushahidi.android.app.services.ConnectivityChangedReceiver"
@@ -74,17 +69,28 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
-        
-        
-        
+
         <!-- MetaData -->
-        <meta-data android:name="com.google.android.gms.version"
-           android:value="@integer/google_play_services_version" />
-        
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/google_map_api_key" />
-        
+
+        <activity
+            android:name="org.ekokonnect.stopthebribe.SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
+        <activity
+            android:name="org.ekokonnect.stopthebribe.LogoutActivity"
+            android:label="@string/title_activity_logout" >
+            <intent-filter>
+                <action android:name="app.action.logout" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

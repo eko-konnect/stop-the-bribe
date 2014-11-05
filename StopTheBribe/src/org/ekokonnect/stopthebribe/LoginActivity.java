@@ -7,6 +7,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender.SendIntentException;
 import android.content.SharedPreferences;
@@ -47,7 +48,7 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
 	/**
 	 * Keep track of the login task to ensure we can cancel it if requested.
 	 */
-	private UserLoginTask mAuthTask = null;
+
 	
 	//Google Required
 	private static final int REQUEST_CODE_RESOLVE_ERR = 9000;
@@ -71,10 +72,10 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
 	private String loginMethod;
 
 	// UI references.
-	private EditText mEmailView;
-	private EditText mFirstNameView;
-	private EditText mLastNameView;
-	private Button mLoginView;
+//	private EditText mEmailView;
+//	private EditText mFirstNameView;
+//	private EditText mLastNameView;
+//	private Button mLoginView;
 	private LoginButton mFacebookLogin;
 	private View mLoginFormView;
 	private View mLoginStatusView;
@@ -99,11 +100,11 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
 		setContentView(R.layout.activity_login);
 
 		// Set up the login form.
-		mEmailView = (EditText) findViewById(R.id.email);
-		mFirstNameView = (EditText)findViewById(R.id.firstname);
-		mLastNameView = (EditText)findViewById(R.id.lastname);
+//		mEmailView = (EditText) findViewById(R.id.email);
+//		mFirstNameView = (EditText)findViewById(R.id.firstname);
+//		mLastNameView = (EditText)findViewById(R.id.lastname);
 		mFacebookLogin = (LoginButton)findViewById(R.id.facebook_sigin);
-		mLoginView = (Button)findViewById(R.id.sign_in_button);
+//		mLoginView = (Button)findViewById(R.id.sign_in_button);
 		mLoginFormView = findViewById(R.id.login_form);
 		mLoginStatusView = findViewById(R.id.login_status);
 		mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
@@ -112,31 +113,15 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
 		//Google Requirements
 		mPlusClient = new PlusClient.Builder(this, this, this)
         .setActions("http://schemas.google.com/AddActivity")
-        .setScopes("PLUS_LOGIN")  // Space separated list of scopes
         .build();
 // Progress bar to be displayed if the connection failure is not resolved.
 		mConnectionProgressDialog = new ProgressDialog(this);
 		mConnectionProgressDialog.setMessage("Signing in...");
 
-		mLoginView.setOnClickListener(
-				new View.OnClickListener() {
-					@Override
-					public void onClick(View view) {
-						loginMethod = "internal";
-						attemptLogin();
-					}
-				});
 		
 		mFacebookLogin.setReadPermissions(Arrays.asList("email"));
 		uiHelper = new UiLifecycleHelper(this, callback);
-	    uiHelper.onCreate(savedInstanceState);
-		
-//		mFacebookLogin.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//            	loginMethod = "facebook";            	
-//            }
-//        });
+	    uiHelper.onCreate(savedInstanceState);		
 		
 		googleSigninButton.setOnClickListener(new View.OnClickListener() {
 			
@@ -154,6 +139,7 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
 		if (!mPlusClient.isConnected()) {
             if (mConnectionResult == null) {
                 mConnectionProgressDialog.show();
+                mPlusClient.connect();
             } else {
                 try {
                     mConnectionResult.startResolutionForResult(this, REQUEST_CODE_RESOLVE_ERR);
@@ -181,62 +167,7 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
 	 * If there are form errors (invalid email, missing fields, etc.), the
 	 * errors are presented and no actual login attempt is made.
 	 */
-	public void attemptLogin() {
-		if (mAuthTask != null) {
-			return;
-		}
-
-		// Reset errors.
-		mEmailView.setError(null);
-		mFirstNameView.setError(null);
-		mLastNameView.setError(null);
-		
-		// Store values at the time of the login attempt.
-		mEmail = mEmailView.getText().toString();
-		mFirstName = mFirstNameView.getText().toString();
-		mLastName = mLastNameView.getText().toString();
-
-		boolean cancel = false;
-		View focusView = null;
-
-		// Check if First Name is empty.
-		if (TextUtils.isEmpty(mFirstName)) {
-			mFirstNameView.setError(getString(R.string.error_field_required));
-			focusView = mFirstNameView;
-			cancel = true;
-		} 
-		
-		//Check if Last Name is empty
-		if (TextUtils.isEmpty(mLastName)) {
-			mLastNameView.setError(getString(R.string.error_field_required));
-			focusView = mLastNameView;
-			cancel = true;
-		} 
-
-		// Check for a valid email address.
-		if (TextUtils.isEmpty(mEmail)) {
-			mEmailView.setError(getString(R.string.error_field_required));
-			focusView = mEmailView;
-			cancel = true;
-		} else if (!mEmail.contains("@")) {
-			mEmailView.setError(getString(R.string.error_invalid_email));
-			focusView = mEmailView;
-			cancel = true;
-		}
-
-		if (cancel) {
-			// There was an error; don't attempt login and focus the first
-			// form field with an error.
-			focusView.requestFocus();
-		} else {
-			// Show a progress spinner, and kick off a background task to
-			// perform the user login attempt.
-			mLoginStatusMessageView.setText(R.string.login_progress_signing_in);
-			showProgress(true);
-			mAuthTask = new UserLoginTask();
-			mAuthTask.execute((Void) null);
-		}
-	}
+	
 
 	/**
 	 * Shows the progress UI and hides the login form.
@@ -279,81 +210,6 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
 		}
 	}
 
-	/**
-	 * Represents an asynchronous login/registration task used to authenticate
-	 * the user.
-	 */
-	public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-		@Override
-		protected Boolean doInBackground(Void... params) {
-			// TODO: attempt authentication against a network service.
-
-			toSharedPreferences();
-			return true;
-		}
-
-		@Override
-		protected void onPostExecute(final Boolean success) {
-			mAuthTask = null;
-			showProgress(false);
-
-			if (success) {
-				startMainActivity();
-			} else {
-				mEmailView
-						.setError(getString(R.string.error_incorrect_password));
-				mEmailView.requestFocus();
-			}
-		}
-
-		@Override
-		protected void onCancelled() {
-			mAuthTask = null;
-			showProgress(false);
-		}
-	}
-	//End of method Groups which handle In App validation
-	
-	
-	//Facebook Validation Methods
-//	public void loginToFacebook(){
-//		//Session.NewPermissionsRequest s = new 
-//        Session.openActiveSession(this, true, new Session.StatusCallback() {
-//            @Override
-//            public void call(Session session, SessionState state, Exception exception) {
-//            	mSession = session;
-//                Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
-//                    @Override
-//                    public void onCompleted(GraphUser user, Response response) {
-//                    	Log.d(TAG, response.toString());
-//                        if (user != null) {
-//                        	
-//                            mFirstName = user.getFirstName();
-//
-//                            //mSession.closeAndClearTokenInformation();
-//                            
-//                            mLastName = user.getLastName();
-////                            user.get
-//                            Log.d(TAG, mFirstName);
-//
-//                            mEmail = user.getProperty("email").toString();
-//                            Log.d(TAG, mEmail );
-//                            //mEmail = "";
-//                            //mSession.closeAndClearTokenInformation();
-//                            
-//                            toSharedPreferences();
-//                            startMainActivity();
-//                            
-//                        }
-//                    }
-//                    
-//                });
-//                
-//            }
-//        });
-//    }
-	
-	// end of facebook methods
 	
 	//Google Signin Methods
 	@Override
@@ -377,7 +233,8 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
 	@Override
 	public void onConnected(Bundle connectionHint) {
 		// TODO Auto-generated method stub
-		Log.d(TAG, connectionHint.toString());
+//		Log.d(TAG, connectionHint.toString());
+		showProgress(true);
 		if (mPlusClient.getCurrentPerson() != null) {
 	        Person currentPerson = mPlusClient.getCurrentPerson();
 	        String personName = currentPerson.getDisplayName();
@@ -425,28 +282,20 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
         Log.i(TAG, "Saved "+Preferences.firstname+
         		":"+Preferences.lastname+":"+Preferences.email+" >> SharedPref");
         Preferences.saveSettings(getApplicationContext());
-        
-//        editor.putString("Email", mEmail);
-//        editor.putString("Firstname", mFirstName);
-//        editor.putString("Lastname", mLastName);
-//        editor.commit();
     }
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		Log.d(TAG, "OnActivityResult");
-//		if(loginMethod == "facebook"){
 			super.onActivityResult(requestCode, resultCode, data);
 			uiHelper.onActivityResult(requestCode, resultCode, data);			
-//		}
 		
-		if(loginMethod == "google"){
+		
 			if (requestCode == REQUEST_CODE_RESOLVE_ERR && resultCode == RESULT_OK) {
 		        mConnectionResult = null;
 		        mPlusClient.connect();
 		    }
-		}
 		
 	}
 	
@@ -509,6 +358,7 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
 		private void onSessionStateChange(Session session, SessionState state, Exception exception) {
 	        if (state.isOpened()) {
 	            Log.i(TAG, "Logged in...");
+	            showProgress(true);
 	            Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
                   @Override
                   public void onCompleted(GraphUser user, Response response) {
@@ -541,5 +391,17 @@ public class LoginActivity extends Activity implements ConnectionCallbacks, OnCo
 	            Log.i(TAG, "Logged out...");
 	        }
 	    }
+	    
+	    public static void logout(Context context){
+			Preferences.loadSettings(context);
+			Preferences.isSignedIn = false;
+			Preferences.saveSettings(context);
+			
+			Session session = Session.getActiveSession();
+			if (session != null){
+				session.closeAndClearTokenInformation();
+				Session.setActiveSession(null);
+			}
+		}
 	    
 }

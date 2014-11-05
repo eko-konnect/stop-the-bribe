@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Generated with http://android-holo-colors.com -->
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <style name="AutoCompleteTextViewGreenCustomTheme" parent="android:Widget.Holo.Light.AutoCompleteTextView">
+      <item name="android:dropDownSelector">@drawable/greencustomtheme_list_selector_holo_light</item>
+	    <item name="android:background">@drawable/greencustomtheme_edit_text_holo_light</item>
+  </style>
+
+  <style name="ImageButtonGreenCustomTheme" parent="android:Widget.Holo.Light.ImageButton">
+	  <item name="android:background">@drawable/greencustomtheme_btn_default_holo_light</item>
+  </style>
+
+  <style name="SpinnerGreenCustomTheme" parent="android:Widget.Holo.Light.Spinner">
+      <item name="android:background">@drawable/greencustomtheme_spinner_background_holo_light</item>
+      <item name="android:dropDownSelector">@drawable/greencustomtheme_list_selector_holo_light</item>
+  </style>
+
+  <style name="ProgressBarGreenCustomTheme" parent="android:Widget.Holo.Light.ProgressBar.Horizontal">
+      <item name="android:progressDrawable">@drawable/greencustomtheme_progress_horizontal_holo_light</item>
+      <item name="android:indeterminateDrawable">@drawable/greencustomtheme_progress_indeterminate_horizontal_holo_light</item>
+  </style>
+
+  <style name="SeekBarGreenCustomTheme" parent="android:Widget.Holo.Light.SeekBar">
+      <item name="android:progressDrawable">@drawable/greencustomtheme_scrubber_progress_horizontal_holo_light</item>
+      <item name="android:indeterminateDrawable">@drawable/greencustomtheme_scrubber_progress_horizontal_holo_light</item>
+      <item name="android:thumb">@drawable/greencustomtheme_scrubber_control_selector_holo_light</item>
+  </style>
+
+  <style name="RatingBarGreenCustomTheme" parent="android:Widget.Holo.Light.RatingBar">
+      <item name="android:progressDrawable">@drawable/greencustomtheme_ratingbar_full_holo_light</item>
+      <item name="android:indeterminateDrawable">@drawable/greencustomtheme_ratingbar_full_holo_light</item>
+  </style>
+
+  <style name="RatingBarBigGreenCustomTheme" parent="android:Widget.Holo.Light.RatingBar.Indicator">
+      <item name="android:progressDrawable">@drawable/greencustomtheme_ratingbar_holo_light</item>
+      <item name="android:indeterminateDrawable">@drawable/greencustomtheme_ratingbar_holo_light</item>
+  </style>
+
+  <style name="RatingBarSmallGreenCustomTheme" parent="android:Widget.Holo.Light.RatingBar.Small">
+      <item name="android:progressDrawable">@drawable/greencustomtheme_ratingbar_small_holo_light</item>
+      <item name="android:indeterminateDrawable">@drawable/greencustomtheme_ratingbar_small_holo_light</item>
+  </style>
+
+  <style name="ToggleGreenCustomTheme" parent="android:Widget.Holo.Light.Button.Toggle">
+      <item name="android:background">@drawable/greencustomtheme_btn_toggle_holo_light</item>
+  </style>
+  
+  <!-- ActionBar styles -->
+    <style name="ActionBarGreenCustomTheme" parent="android:Widget.Holo.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@color/greencustomtheme_color</item>
+    </style>
+
+</resources>

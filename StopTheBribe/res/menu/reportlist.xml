@@ -3,9 +3,15 @@
 	
 	<item
 	    android:id="@+id/action_create_report"
-	    android:showAsAction="ifRoom"
+	    android:showAsAction="always"
 	    android:title="@string/action_create_report"
-	    android:icon="@android:drawable/ic_input_add"/>  
+	    android:icon="@android:drawable/ic_input_add"/> 
+	    
+	<item 
+        android:id="@+id/action_refresh"
+        android:showAsAction="ifRoom"
+        android:title="Refresh"
+        android:icon="@drawable/ic_action_refresh"/>
 	
 	<item
 	    android:id="@+id/action_search"
