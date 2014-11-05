@@ -21,7 +21,6 @@ package com.ushahidi.android.app.services;
 
 import android.content.Intent;
 
-import com.ushahidi.android.app.Preferences;
 import com.ushahidi.android.app.api.CategoriesApi;
 import com.ushahidi.android.app.api.ReportsApi;
 import com.ushahidi.android.app.database.Database;
@@ -80,11 +79,6 @@ public class FetchReports extends SyncServices {
 		status = new ReportsApi().saveReports(this) ? 0 : 99;
 
 		statusIntent.putExtra("status", status);
-		
-		Preferences.loadSettings(getApplicationContext());
-		Preferences.serviceStatus = 0;
-		Preferences.saveSettings(getApplicationContext());
-		
 		sendBroadcast(statusIntent);
 
 	}

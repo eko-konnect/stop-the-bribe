@@ -86,7 +86,7 @@ GooglePlayServicesClient.OnConnectionFailedListener {
 		reportHelper = new ReportHelper(getApplicationContext());
 		mLocationClient = new LocationClient(this, this, this);
 		initializeUI();
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+		
 	}
 	
 	@Override

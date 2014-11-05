@@ -17,7 +17,6 @@ public class Preferences {
 	public static String savePath = "";
 
 	public static String domain = "http://stopthebribes.net/";
-	public static int serviceStatus = 0;
 
 	public static String firstname = "";
 
@@ -72,7 +71,6 @@ public class Preferences {
 		savePath = settings.getString("savePath", path);
 
 		domain = settings.getString("Domain", Preferences.domain);
-		serviceStatus = settings.getInt("serviceStatus", Preferences.serviceStatus);
 		fileName = settings.getString("FileName", "");
 		firstname = settings.getString("Firstname", "");
 		lastname = settings.getString("Lastname", "");
@@ -119,7 +117,6 @@ public class Preferences {
 		settings = context.getSharedPreferences(PREFS_NAME, 0);
 		editor = settings.edit();
 		editor.putString("Domain", domain);
-		editor.putInt("serviceStatus", serviceStatus);
 		editor.putString("FileName", fileName);
 		editor.putInt("CheckinEnabled", isCheckinEnabled);
 		editor.putInt("ActiveDeployment", activeDeployment);
